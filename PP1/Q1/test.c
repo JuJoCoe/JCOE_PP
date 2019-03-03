@@ -1,59 +1,35 @@
-#include<stdio.h>
-int main()
-{
-    int i,j,k,n;
-    char inputValues;
-    float A[20][20],c,x[10],sum=0.0;
-    printf("\nEnter integer n to create a nxn matrix: ");
-    scanf("%d",&n);
-    printf("\nWould you like to input your own values? (y or n): ");
-    scanf("%char", &inputValues);
-    printf("\n\n");
+#include <pthread.h>
+#include <stdio.h>
+#include <limits.h>
 
-    if (inputValues == 'y'){
+ void *find_min(void *list_ptr);
+ pthread_mutex_t minimum_value_lock;
+ int minimum_value, partial_list_size;
 
-    }else if (inputValues == 'n'){
-    for(i=1; i<=n; i++)
-    {
-        for(j=1; j<=(n+1); j++)
-        {
-            printf("A[%d][%d] : ", i,j);
-            scanf("%f",&A[i][j]);
-        }
-    }
-    }else{
-    	printf("Error: Enter y or n for input your own values \n");
-    	return(1);
-    }
-    for(j=1; j<=n; j++) /* loop for the generation of upper triangular matrix*/
-    {
-        for(i=1; i<=n; i++)
-        {
-            if(i>j)
-            {
-                c=A[i][j]/A[j][j];
-                for(k=1; k<=n+1; k++)
-                {
-                    A[i][k]=A[i][k]-c*A[j][k];
-                }
-            }
-        }
-    }
-    x[n]=A[n][n+1]/A[n][n];
-    /* this loop is for backward substitution*/
-    for(i=n-1; i>=1; i--)
-    {
-        sum=0;
-        for(j=i+1; j<=n; j++)
-        {
-            sum=sum+A[i][j]*x[j];
-        }
-        x[i]=(A[i][n+1]-sum)/A[i][i];
-    }
-    printf("\nThe solution is: \n");
-    for(i=1; i<=n; i++)
-    {
-        printf("\nx%d=%f\t",i,x[i]); /* x1, x2, x3 are the required solutions*/
-    }
-    return(0);
+ main() {
+ /* declare and initialize data structures and list */
+ minimum_value = INT_MIN;
+ //pthread_init();
+ pthread_mutex_init(&minimum_value_lock, NULL);
+
+ /* initialize lists, list_ptr, and partial_list_size */
+ /* create and join threads here */
+ }
+
+ void *find_min(void *list_ptr) {
+ int *partial_list_pointer, my_min, i;
+ my_min = INT_MIN;
+ partial_list_pointer = (int *) list_ptr;
+ for (i = 0; i < partial_list_size; i++)
+ if (partial_list_pointer[i] < my_min)
+ my_min = partial_list_pointer[i];
+ /* lock the mutex associated with minimum_value and
+ update the variable as required */
+ pthread_mutex_lock(&minimum_value_lock);
+ if (my_min < minimum_value)
+ minimum_value = my_min;
+ /* and unlock the mutex */
+ pthread_mutex_unlock(&minimum_value_lock);
+ pthread_exit(0);
 }
+

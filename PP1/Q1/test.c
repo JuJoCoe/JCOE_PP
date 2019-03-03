@@ -6,8 +6,8 @@
  void *find_min(void *list_ptr);
  pthread_mutex_t minimum_value_lock;
  int minimum_value, partial_list_size;
- int list_size = 10;
- int list_ptr[10];
+ int list_size = 100000000;
+ int list_ptr[100000000];
 
 
 

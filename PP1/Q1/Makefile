@@ -1,15 +1,16 @@
 CC := gcc
 
-LIB := -pthread
+LIB := -lpthread
 
 
 
-test: test.c
+example73: example73.c
   
-	${CC} -o  test.exe  test.c  ${LIB}
+	${CC} -o  example73.exe  test.c  ${LIB}
 
 
-runtest: test.exe
-	./test.exe
+example77: example77.c
+	${CC} -o  example73.exe  test.c  ${LIB}
 
-all: test runtest
+
+all: example73 example77

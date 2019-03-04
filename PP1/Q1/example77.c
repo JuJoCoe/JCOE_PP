@@ -92,7 +92,7 @@ void *find_min_rw(void *list_ptr);
  	 	 pthread_attr_init(&attr);
 
  	 //Populates the list with random numbers
- //	 srand(time(0));
+ 	 srand(time(0));
  	 for(int i = 0; i < list_size; i++){
  		 list_ptr[i] = rand();
  	 }

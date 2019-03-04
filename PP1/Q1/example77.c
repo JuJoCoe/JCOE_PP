@@ -5,7 +5,8 @@
 #define MAX_THREADS 16
 
 
-	void *find_min_rw(void *list_ptr);
+void *find_min_rw(void *list_ptr);
+
  int partial_list_size;
  int minimum_value = INT_MAX;
  int list_size = 100000000;
@@ -23,6 +24,8 @@
  pthread_mutex_t read_write_lock;
  } mylib_rwlock_t;
 
+
+ mylib_rwlock_t read_write_lock;
 
  void mylib_rwlock_init (mylib_rwlock_t *l) {
  l -> readers = l -> writer = l -> pending_writers = 0;
@@ -81,6 +84,8 @@
 
  int main(int argc, char **argv) {
 
+
+
  	 //Thread intialization
  	 	 pthread_t p_threads[MAX_THREADS];
  	 	 pthread_attr_t attr;
@@ -114,7 +119,6 @@
   //Creates threads
   int i = 0;
   for (i = 0; i < num_threads; i++) {
-
   		pthread_create(&p_threads[i], &attr, find_min_rw, &list_ptr[bounds]);
   		bounds = bounds + partial_list_size;
   	}
@@ -137,10 +141,6 @@
 
  void *find_min_rw(void *list_ptr) {
 
-	 //initalize struct
-	 mylib_rwlock_t thread1;
-
-
 //intialize variables
  int *partial_list_pointer, my_min, i;
  my_min = INT_MAX;
@@ -154,14 +154,14 @@
  }
  /* lock the mutex associated with minimum_value and
  update the variable as required */
- mylib_rwlock_rlock(&thread1);
+ mylib_rwlock_rlock(&read_write_lock);
  if (my_min < minimum_value) {
- mylib_rwlock_unlock(&thread1);
- mylib_rwlock_wlock(&thread1);
+ mylib_rwlock_unlock(&read_write_lock);
+ mylib_rwlock_wlock(&read_write_lock);
  minimum_value = my_min;
  }
  /* and unlock the mutex */
- mylib_rwlock_unlock(&thread1);
+ mylib_rwlock_unlock(&read_write_lock);
  //printf("This Thread Min = %d\n", my_min);
  pthread_exit(0);
   }

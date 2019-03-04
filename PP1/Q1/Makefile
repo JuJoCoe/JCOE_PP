@@ -10,7 +10,7 @@ example73: example73.c
 
 
 example77: example77.c
-	${CC} -o  example73.exe  example77.c  ${LIB}
+	${CC} -o  example77.exe  example77.c  ${LIB}
 
 
 all: example73 example77

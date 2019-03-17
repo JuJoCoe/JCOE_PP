@@ -149,12 +149,12 @@ pthread_mutex_init(&lock, NULL);
 
 
 	//Print outputs
-	printf("\n");
+/*	printf("\n");
 	printf("X Outputs:\n");
 	for(int l = 1; l <= n; l++){
 		 printf("x%d = %f\n", l, x[l]);
 	}
-
+*/
 
 
 	return 0;

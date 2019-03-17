@@ -5,13 +5,13 @@
 #include <time.h>
 
 
-#define MAXN 2000
+#define MAXN 2001
 #define MAX_THREADS 8
 
 float A[MAXN][MAXN];
 float b[MAXN];
 float x[MAXN];
-int n = 1000;
+int n = 2000;
 float y = 0.0;
 int num_threads = MAX_THREADS;
 

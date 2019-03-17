@@ -11,7 +11,7 @@
 float A[MAXN][MAXN];
 float b[MAXN];
 float x[MAXN];
-int n = 200;
+int n = 1000;
 float y = 0.0;
 int num_threads = MAX_THREADS;
 

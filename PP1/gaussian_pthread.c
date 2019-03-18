@@ -11,7 +11,7 @@
 float A[MAXN][MAXN];
 float b[MAXN];
 float x[MAXN];
-int n = 2000;
+int n = 1000;
 float y = 0.0;
 int num_threads = MAX_THREADS;
 
@@ -49,6 +49,9 @@ int
 
 
   int main(int argc, char **argv) {
+
+	  printf("\nEnter integer n to create a nxn matrix: ");
+	  scanf("%d",&n);
 
 	  //Takes in arguments to declare number of threads (Code Reference: Yong Chen)
 	  if (argc != 2) {
@@ -147,14 +150,14 @@ pthread_mutex_init(&lock, NULL);
 		}
 
 
-
+if(n < 11){
 	//Print outputs
-/*	printf("\n");
+	printf("\n");
 	printf("X Outputs:\n");
 	for(int l = 1; l <= n; l++){
 		 printf("x%d = %f\n", l, x[l]);
 	}
-*/
+}
 
 
 	return 0;
@@ -173,12 +176,8 @@ void *rowOps(void *ptr){
 			for(int l = row+1; l<n+1; l++){
 				A[innerrow][l] = A[innerrow][l] - z*A[row][l];
 			}
-//			pthread_mutex_lock(&lock);
 			b[innerrow] = b[innerrow] - A[innerrow][row] * b[row];
 			A[innerrow][row] = 0.0;
-//			pthread_mutex_unlock(&lock);
-
-
 
 			pthread_exit(0);
 }

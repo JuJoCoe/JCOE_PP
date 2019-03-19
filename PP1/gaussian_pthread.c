@@ -8,6 +8,7 @@
 #define MAXN 2001
 #define MAX_THREADS 8
 
+//Initialize Variables
 float A[MAXN][MAXN];
 float b[MAXN];
 float x[MAXN];
@@ -15,14 +16,18 @@ int n = 1000;
 float y = 0.0;
 int num_threads = MAX_THREADS;
 
+//creates a clock variable, this was used to time certain aspects of the code (currently commented out)
 clock_t start, end;
 double cpu_time_used;
 
-
+//Row Operation method
 void *rowOps(void *ptr);
+
+
 pthread_mutex_t lock;
 pthread_cond_t m_cond;
-int count = 0;
+
+//keeps track of the pthread index
 int threadcount = 1;
 
 
@@ -48,8 +53,9 @@ int
   pthread_mutex_t *mutex_lock);
 
 
-  int main(int argc, char **argv) {
+ int main(int argc, char **argv) {
 
+	 //allows user to input since of the array
 	  printf("\nEnter integer n to create a nxn matrix: ");
 	  scanf("%d",&n);
 
@@ -67,6 +73,7 @@ int
 	  	 		}
 	  	 	}
 
+//Intialize mutex lock
 pthread_mutex_init(&lock, NULL);
 
 //Generate the nxn matrix using random number function
@@ -97,7 +104,6 @@ pthread_mutex_init(&lock, NULL);
 		//Delete leftover threads from inner for loop
 		if (threadcount >= 2){
 		for (int z = 1; z <= threadcount-1; z++){
-			count++;
 			threadcount = 1;
 			pthread_join(p_threads[z], NULL);
 			}
@@ -110,8 +116,9 @@ pthread_mutex_init(&lock, NULL);
 
 			b[k] = b[k]/y;
 			A[k][k] = 1.0;
-			//row operations
+			//row operations(Parallelized)
 			for(int i = k+1; i<n+1; i++){
+				//Creates an instance of a struc to be able to pass in row and innerrow values
 				struct rc *thisrc = malloc(sizeof(struct rc));
 				thisrc->row = k;
 				thisrc->innerrow = i;
@@ -123,7 +130,6 @@ pthread_mutex_init(&lock, NULL);
 		//		Concurrent thread limit reached, wait for threads to finish then move on
 				if(threadcount == num_threads+1){
 					for (int z = 1; z <= num_threads; z++){
-						count++;
 						threadcount = 1;
 						pthread_join(p_threads[z], NULL);
 						}
@@ -136,7 +142,6 @@ pthread_mutex_init(&lock, NULL);
 
 //	Delete leftover threads
 	for (int z = 1; z <= threadcount-1; z++){
-		count++;
 		pthread_join(p_threads[z], NULL);
 	}
 
@@ -149,7 +154,7 @@ pthread_mutex_init(&lock, NULL);
 				 x[i] = x[i]/A[i][i];
 		}
 
-
+//Prints out anything lower than 11 dimensions to check for accuary, over 11 would be to much
 if(n < 11){
 	//Print outputs
 	printf("\n");
@@ -181,3 +186,4 @@ void *rowOps(void *ptr){
 
 			pthread_exit(0);
 }
+

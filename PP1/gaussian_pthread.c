@@ -50,8 +50,8 @@ int
 
   int main(int argc, char **argv) {
 
-	  printf("\nEnter integer n to create a nxn matrix: ");
-	  scanf("%d",&n);
+//	  printf("\nEnter integer n to create a nxn matrix: ");
+//	  scanf("%d",&n);
 
 	  //Takes in arguments to declare number of threads (Code Reference: Yong Chen)
 	  if (argc != 2) {

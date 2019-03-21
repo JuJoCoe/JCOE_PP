@@ -23,34 +23,19 @@ double cpu_time_used;
 //Row Operation method
 void *rowOps(void *ptr);
 
-
-pthread_mutex_t lock;
-pthread_cond_t m_cond;
-
 //keeps track of the pthread index
-int threadcount = 1;
+int threadcount = -1;
 
+//keeps track of what row to start on
+int indexrow = 1;
 
 //Create a structure that contains row and innerrow values
 struct rc {
  int row;
  int innerrow;
- } rc_default = {0, 0};
-
-//Intialize Mutex locks
-int
-  pthread_mutex_init (
-  pthread_mutex_t *mutex_lock,
-  const pthread_mutexattr_t *lock_attr);
-
-  int
-  pthread_mutex_lock (
-  pthread_mutex_t *mutex_lock);
-
-
-  int
-  pthread_mutex_unlock (
-  pthread_mutex_t *mutex_lock);
+ int iterations;
+ int leftover;
+ } rc_default = {0, 0, 0, 0};
 
 
  int main(int argc, char **argv) {
@@ -74,7 +59,7 @@ int
 	  	 	}
 
 //Intialize mutex lock
-pthread_mutex_init(&lock, NULL);
+//pthread_mutex_init(&lock, NULL);
 
 //Generate the nxn matrix using random number function
 	 srand(time(0));
@@ -84,6 +69,7 @@ pthread_mutex_init(&lock, NULL);
 	 			if(A[i][j] == 0){
 	 				A[i][j] = 1;
 	 			}
+	 	//		 printf("A = %f\n", A[i][j]);
 	 		 }
 	 		 b[i] = rand() % (10 + 1 - 0) + 0;
 	 		 if(b[i] == 0){
@@ -101,14 +87,8 @@ pthread_mutex_init(&lock, NULL);
 
 //start Gauss Elim
 	for (int k = 1; k < n+1; k++){
+		threadcount=-1;
 		//Delete leftover threads from inner for loop
-		if (threadcount >= 2){
-		for (int z = 1; z <= threadcount-1; z++){
-			threadcount = 1;
-			pthread_join(p_threads[z], NULL);
-			}
-		}
-
 			y = A[k][k];
 			for(int j = k+1; j < n+1; j++){
 				A[k][j] = A[k][j]/y;
@@ -116,34 +96,53 @@ pthread_mutex_init(&lock, NULL);
 
 			b[k] = b[k]/y;
 			A[k][k] = 1.0;
-			//row operations(Parallelized)
-			for(int i = k+1; i<n+1; i++){
-				//Creates an instance of a struc to be able to pass in row and innerrow values
+
+
+			//Calculates total number of times the inner loop will run
+			int TotalIterations = n - (k);
+			//Calculates the total number of iteration each thread will run
+			int IterationsPerThread = TotalIterations/num_threads;
+			//Left over iterations that will be given to some threads
+			int Remainder = TotalIterations%num_threads;
+			//Which indexrow to start at
+			indexrow = k+1;
+
+
+			//Multithreading
+			for (int i = 0; i < num_threads; i++) {
+				int leftover = 0;
+				//struct to pass in for threads
 				struct rc *thisrc = malloc(sizeof(struct rc));
 				thisrc->row = k;
-				thisrc->innerrow = i;
+				thisrc->innerrow = indexrow;
 
-				//Creates thread calling ColumnsOps method and passing in struct arguement
-				pthread_create(&p_threads[threadcount], &attr, rowOps, (void *)thisrc);
-				//Keeps track of how many threads are created
-				threadcount++;
-		//		Concurrent thread limit reached, wait for threads to finish then move on
-				if(threadcount == num_threads+1){
-					for (int z = 1; z <= num_threads; z++){
-						threadcount = 1;
-						pthread_join(p_threads[z], NULL);
-						}
-
+				//while there is still a remainder left, add 1 to thread iteration
+				if(Remainder != 0){
+					Remainder--;
+					leftover++;
 				}
+				//adds to struct
+				thisrc->iterations = IterationsPerThread;
+				thisrc->leftover = leftover;
+
+				//This is to check to see if we need to use each thread(if loop only runs 6 times use only 6 threads)
+				if(indexrow < IterationsPerThread +leftover+indexrow){
+					pthread_create(&p_threads[i], &attr, rowOps, (void *)thisrc);
+					//moves the rows
+					indexrow = indexrow + IterationsPerThread + leftover;
+					//keeps track of how many threads are created(just incase we only create a few threads)
+					threadcount++;
+				}
+
 			}
+
+			//Join threads
+			for (int i = 0; i <= threadcount; i++){
+				pthread_join(p_threads[i], NULL);
 			}
+		}
 
 
-
-//	Delete leftover threads
-	for (int z = 1; z <= threadcount-1; z++){
-		pthread_join(p_threads[z], NULL);
-	}
 
 	//run back substitution
 	for(int i=n; i >= 1; i--){
@@ -171,19 +170,22 @@ if(n < 11){
 
  //Method for row operations
 void *rowOps(void *ptr){
-	int innerrow, row = 0;
+	int innerrow, row, iterations, leftover = 0;
 	struct rc *args = ptr;
 
 	row = args->row;
-	innerrow = args->innerrow;
+	innerrow= args->innerrow;
+	iterations=args->iterations;
+	leftover=args->leftover;
 
-			float z = A[innerrow][row];
+	for(int s = innerrow; s<iterations+innerrow+leftover; s++){
+			float z = A[s][row];
 			for(int l = row+1; l<n+1; l++){
-				A[innerrow][l] = A[innerrow][l] - z*A[row][l];
+				A[s][l] = A[s][l] - z*A[row][l];
 			}
-			b[innerrow] = b[innerrow] - A[innerrow][row] * b[row];
-			A[innerrow][row] = 0.0;
-
+			b[s] = b[s] - A[s][row] * b[row];
+			A[s][row] = 0.0;
+	}
 			pthread_exit(0);
 }
 

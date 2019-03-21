@@ -41,9 +41,9 @@ struct rc {
  int main(int argc, char **argv) {
 
 	 //allows user to input since of the array
-	  printf("\nEnter integer n to create a nxn matrix: ");
-	  scanf("%d",&n);
-
+//	  printf("\nEnter integer n to create a nxn matrix: ");
+//	  scanf("%d",&n);
+		n = 1000;
 	  //Takes in arguments to declare number of threads (Code Reference: Yong Chen)
 	  if (argc != 2) {
 	  	 		printf("Usage: %s <number of threads>\n", argv[0]);

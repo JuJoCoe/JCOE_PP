@@ -59,7 +59,7 @@ int main(int argc, char **argv)
 //Matrix multiplication algorithm received from the test book
 
 //Parallelize all 3 loops using collapse method
-#pragma omp parallel for shared(a, b, c, dim) num_threads(num_threads) schedule(static, 16) collapse(3)
+#pragma omp parallel for shared(a, b, c, dim) num_threads(num_threads) schedule(static) collapse(3)
 	for (i = 0; i < dim; i++) {
 		for (j = 0; j < dim; j++) {
 			for (k = 0; k < dim; k++) {

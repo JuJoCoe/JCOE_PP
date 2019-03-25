@@ -13,7 +13,7 @@
 float A[MAXN][MAXN];
 float b[MAXN];
 float x[MAXN];
-int n = 2000;
+int n = 1000;
 float y = 0.0;
 int num_threads = MAX_THREADS;
 
@@ -39,8 +39,8 @@ struct rc {
 	  	 		}
 	  	 	}
 
-//	 srand(time(0));
-	 srand(1);
+	 srand(time(0));
+//	 srand(1);
 	 for(int i = 1; i <= n; i++){
 	 		 for(int j = 1; j <= n; j++){
 	 			 A[i][j] = (rand() % 11) - 5;

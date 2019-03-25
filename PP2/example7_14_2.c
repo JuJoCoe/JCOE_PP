@@ -61,7 +61,7 @@ int main(int argc, char **argv)
 
 	for (i = 0; i < dim; i++) {
 		//Parallelize inner 2 loops using collapse method
-		#pragma omp parallel for shared(a, b, c, dim) num_threads(num_threads) schedule(static, 16) collapse(2)
+		#pragma omp parallel for shared(a, b, c, dim) num_threads(num_threads) schedule(static) collapse(2)
 		for (j = 0; j < dim; j++) {
 			for (k = 0; k < dim; k++) {
 				 c[i][j] += a[i] [k] * b[k][j];

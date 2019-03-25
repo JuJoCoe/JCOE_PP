@@ -17,6 +17,10 @@ float c[1000][1000];
 
 int main(int argc, char **argv)
 {
+	dim = 1000;
+//	 printf("\nEnter dimensions: ");
+//	 scanf("%d",&dim);
+
 
 	//Takes in the argument of the number of threads they want
 	 if (argc != 2) {
@@ -32,14 +36,11 @@ int main(int argc, char **argv)
   	 		}
   	 	}
 
-	//Size of dimensions
-	dim = 2;
-
 	//Populates the 2 arrays using random integers.
 	//Takes random integers between -5 and 5 for consistency and gets rid of all 0 values
 	//because they make complicate multiplication
-	//	 srand(time(0));
-		 srand(1);
+		 srand(time(0));
+	//	 srand(1);
 		for(int i = 0; i < dim; i++){
 			 for(int j = 0; j < dim; j++){
 				 a[i][j] = (rand() % 11) - 5;
@@ -57,22 +58,21 @@ int main(int argc, char **argv)
 
 	//Matrix multiplication algorithm received from the test book
 	for (i = 0; i < dim; i++) {
-
 		for (j = 0; j < dim; j++) {
-
 		//parallelize inner loop
 		#pragma omp parallel for shared(a, b, c, dim) num_threads(num_threads) schedule(static)
 			for (k = 0; k < dim; k++) {
 				 c[i][j] += a[i] [k] * b[k][j];
-
 			}
 		}
 	}
 
+	//Prints out results of matrix C
+	if(dim < 8){
 	for(int i = 0; i < dim; i++){
-				 for(int j = 0; j < dim; j++){
-					 printf("C[%d][%d] = %f\n", i, j, c[i][j]);
-				 }
+		for(int j = 0; j < dim; j++){
+			printf("C[%d][%d] = %f\n", i, j, c[i][j]);
+			}
+		}
 	}
-
 }

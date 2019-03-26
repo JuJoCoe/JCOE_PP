@@ -18,8 +18,8 @@ float c[1000][1000];
 int main(int argc, char **argv)
 {
 	dim = 1000;
-//	 printf("\nEnter dimensions: ");
-//	 scanf("%d",&dim);
+	 printf("\nEnter dimensions: ");
+	 scanf("%d",&dim);
 
 	//Takes in the argument of the number of threads they want
 	 if (argc != 2) {

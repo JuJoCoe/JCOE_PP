@@ -25,6 +25,9 @@ struct rc {
 
  //Takes in arguments to declare number of threads (Code Reference: Yong Chen)
   int main(int argc, char **argv) {
+	   //allows user to input since of the array
+	  printf("\nEnter integer n to create a nxn matrix: ");
+	  scanf("%d",&n);
 
 	  if (argc != 2) {
 	  	 		printf("Usage: %s <number of threads>\n", argv[0]);

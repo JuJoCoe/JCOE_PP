@@ -5,30 +5,27 @@
 #include <time.h>
 #include <omp.h>
 
-
+//define maxn as 2001 since matrix index starts at 1
 #define MAXN 2001
 #define MAX_THREADS 8
 
-
+//define global variables
 float A[MAXN][MAXN];
 float b[MAXN];
 float x[MAXN];
-int n = 1000;
+int n = 2000;
 float y = 0.0;
 int num_threads = MAX_THREADS;
 
-struct rc {
- int row;
- int innerrow;
- } rc_default = {0, 0};
-
-
  //Takes in arguments to declare number of threads (Code Reference: Yong Chen)
   int main(int argc, char **argv) {
-	   //allows user to input since of the array
-	  printf("\nEnter integer n to create a nxn matrix: ");
-	  scanf("%d",&n);
 
+	  //allows user to input since of the array
+	 	  printf("\nEnter integer n to create a nxn matrix: ");
+	 	  scanf("%d",&n);
+
+
+	 //Takes in arguments to declare number of threads (Code Reference: Yong Chen)
 	  if (argc != 2) {
 	  	 		printf("Usage: %s <number of threads>\n", argv[0]);
 	  	 		printf("Using a default number of threads: %d\n", MAX_THREADS);
@@ -42,8 +39,8 @@ struct rc {
 	  	 		}
 	  	 	}
 
+	  //Matrix generation
 	 srand(time(0));
-//	 srand(1);
 	 for(int i = 1; i <= n; i++){
 	 		 for(int j = 1; j <= n; j++){
 	 			 A[i][j] = (rand() % 11) - 5;
@@ -63,7 +60,6 @@ struct rc {
 
 //start Gauss Elim
 
-
 	for (int k = 1; k < n+1; k++){
 			y = A[k][k];
 			for(int j = k+1; j < n+1; j++){
@@ -71,7 +67,8 @@ struct rc {
 			}
 			b[k] = b[k]/y;
 			A[k][k] = 1.0;
-#pragma omp parallel for shared(A, b, n) num_threads(num_threads) schedule(static)
+		//Loop to be parallelized. Has no race conditions unlike the loops above
+		#pragma omp parallel for shared(A, b, n) num_threads(num_threads) schedule(static)
 				for(int i = k+1; i<n+1; i++){
 				float z = A[i][k];
 						for(int l = k+1; l<n+1; l++){

@@ -5,7 +5,7 @@
 #define TAG 13
 
 int main(int argc, char *argv[]) {
-	double **A, **b, **x, **temp;
+	double **A, **b, **x, *temp;
 	int n = 2000;
 	double startTime, endTime;
 	int myrank, numnodes, stripsize, offset, numElements;

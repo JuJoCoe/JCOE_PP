@@ -62,12 +62,12 @@ int main(int argc, char *argv[]) {
 		A[2][2] = 2;
 		b[2] = -3;
 	}
-
+	
 	for(i = 0; i < N; i++){
 		for(j=0; j < N; j++){
 			printf("A[%d][%d] = %f\n", i, j, A[i][j]);
 		}
-		printf("b[%d] = %f",i, b[i]);
+		printf("b[%d] = %f\n",i, b[i]);
 	}
 
 

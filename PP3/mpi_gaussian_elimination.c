@@ -16,6 +16,11 @@ int main(int argc, char *argv[]) {
 	MPI_Comm_rank(MPI_COMM_WORLD, &myrank);
 	MPI_Comm_size(MPI_COMM_WORLD, &numnodes);
 
+	char processor_name[MPI_MAX_PROCESSOR_NAME];
+	int name_len;
+	MPI_Get_processor_name(processor_name, &name_len);
+
+
 	N = atoi(argv[1]);
 
 	//Allocate A
@@ -62,12 +67,12 @@ int main(int argc, char *argv[]) {
 		A[2][2] = 2;
 		b[2] = -3;
 	}
-	
+
 	for(i = 0; i < N; i++){
 		for(j=0; j < N; j++){
-			printf("A[%d][%d] = %f\n", i, j, A[i][j]);
+			printf("A[%d][%d] = %f from node %s, rank %d", i, j, A[i][j], processor_name, myrank);
 		}
-		printf("b[%d] = %f\n",i, b[i]);
+		printf("b[%d] = %f",i, b[i]);
 	}
 
 
@@ -101,4 +106,3 @@ int main(int argc, char *argv[]) {
 
 
 }
-

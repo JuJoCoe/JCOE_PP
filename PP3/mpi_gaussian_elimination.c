@@ -5,7 +5,7 @@
 #define TAG 13
 
 int main(int argc, char *argv[]) {
-	double **A, *B, *X, *tmp;
+	double **A, *b, *x, *tmp;
 	int N = 2000;
 	double startTime, endTime;
 	int myrank, numnodes, stripSize, offset, numElements;
@@ -32,12 +32,16 @@ int main(int argc, char *argv[]) {
 	      A[i] = &tmp[i * N];
 	  }
 
+	//Allocate b
+	b = (double *) malloc (sizeof(double ) * N);
+	for(i = 0; i < N; i++){
+		b[i] = 1;
+		printf("b[%d] = %d",i, b[i]);
+	}
 
 	MPI_Finalize();
-  	return 0;
-
-
-
+	return 0;
 
 
 }
+

@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
 	b = (double *) malloc (sizeof(double ) * N);
 	for(i = 0; i < N; i++){
 		b[i] = 1;
-		printf("b[%d] = %d",i, b[i]);
+		printf("b[%d] = %d\n",i, b[i]);
 	}
 
 	MPI_Finalize();

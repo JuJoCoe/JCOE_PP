@@ -34,10 +34,67 @@ int main(int argc, char *argv[]) {
 
 	//Allocate b
 	b = (double *) malloc (sizeof(double ) * N);
-	for(i = 0; i < N; i++){
-		b[i] = 1;
+/*	for(i = 0; i < N; i++){
+		b[i] = 1.0;
 		printf("b[%d] = %f\n",i, b[i]);
 	}
+	*/
+
+	//Allocate x
+	x = (double *) malloc (sizeof(double ) * N);
+		for(i = 0; i < N; i++){
+			x[i] = 0.0;
+		}
+
+	if(myrank == 0){
+		A[0][0] = 2;
+		A[0][1] = 1;
+		A[0][2] = -1;
+		b[0] = 8;
+
+		A[1][0] = -3;
+		A[1][1] = -1;
+		A[1][2] = 2;
+		b[1] = -11;
+
+		A[2][0] = -2;
+		A[2][1] = 1;
+		A[2][2] = 2;
+		b[2] = -3;
+	}
+
+	for(i = 0; i < N; i++){
+		for(j=0; j < N; j++){
+			printf("A[%d][%d] = %f\n", i, j, A[i][j]);
+		}
+		printf("b[%d] = %f",i, b[i]);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	MPI_Finalize();
 	return 0;

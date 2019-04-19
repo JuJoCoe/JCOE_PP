@@ -81,7 +81,7 @@ int main(int argc, char *argv[]) {
 	    	MPI_Send(A[offset], numElements, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
 	    	MPI_Send(&number, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
 	    	offset += stripSize;
-		MPI_Barrier(MPI_COMM_WORLD);
+	//	MPI_Barrier(MPI_COMM_WORLD);
 	    }
 	    }
 

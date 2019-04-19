@@ -68,18 +68,35 @@ int main(int argc, char *argv[]) {
 		b[2] = -3;
 	}
 
+	b[0] = 8;
+	b[1] = -11;
+	b[2] = -3;
 
+
+	//numnodes = number of processes
 	stripSize = N/numnodes;
-	printf("numnodes = %d\n", numnodes);
 
-	for(number = 1; number < 10; number++){
+
+//	for(k = 0; k < N ; k++){
 
 	if (myrank == 0) {
+		float y = A[k][k];
+		for(int j = k+1; j < N; j++){
+			A[k][j] = A[k][j]/y;
+		}
+
+		b[k] = b[k]/y;
+		A[k][k] = 1.0;
+
+		int TotalIterations = N - (k);
+		int IterationsPerProcess = TotalIterations/numnodes;
+		int indexrow = k+1;
+
 	    offset = stripSize;
 	    numElements = stripSize * N;
 	    for (i=1; i<numnodes; i++) {
 	    	MPI_Send(A[offset], numElements, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
-	//    	MPI_Send(&number, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
+	    	MPI_Send(b[0], N, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
 	    	offset += stripSize;
 	    }
 
@@ -87,14 +104,16 @@ int main(int argc, char *argv[]) {
 	  }
 	  else {  // receive my part of A
 	    MPI_Recv(A[0], stripSize * N, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-	//    MPI_Recv(&number, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-	    printf("number = %d from node %s, rank %d\n", number, processor_name, myrank);
+	    MPI_Recv(b[0], 1, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+	    printf("b[0] = %f from node %s, rank %d\n", b[0], processor_name, myrank);
 	    MPI_Barrier(MPI_COMM_WORLD);
-	    
+
 	  }
 
-	 MPI_Barrier(MPI_COMM_WORLD);
-	}
+//myrank 0 sends a flag to see if the process will need to run this line of code
+
+	// MPI_Barrier(MPI_COMM_WORLD);
+	//}
 
 
 

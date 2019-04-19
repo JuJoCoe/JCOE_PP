@@ -79,7 +79,7 @@ int main(int argc, char *argv[]) {
 	    numElements = stripSize * N;
 	    for (i=1; i<numnodes; i++) {
 	    	MPI_Send(A[offset], numElements, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
-	    	MPI_Send(&number, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
+	//    	MPI_Send(&number, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
 	    	offset += stripSize;
 	    }
 
@@ -87,7 +87,7 @@ int main(int argc, char *argv[]) {
 	  }
 	  else {  // receive my part of A
 	    MPI_Recv(A[0], stripSize * N, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-	    MPI_Recv(&number, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+	//    MPI_Recv(&number, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 	    printf("number = %d from node %s, rank %d\n", number, processor_name, myrank);
 	    MPI_Barrier(MPI_COMM_WORLD);
 	    

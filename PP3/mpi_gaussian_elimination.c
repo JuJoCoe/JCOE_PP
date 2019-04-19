@@ -10,7 +10,7 @@ int main(int argc, char *argv[]) {
 	double startTime, endTime;
 	int myrank, numnodes, stripSize, offset, numElements;
 	int i, j, k;
-	int number = 3;
+	int number;
 
 	MPI_Init(&argc, &argv);
 

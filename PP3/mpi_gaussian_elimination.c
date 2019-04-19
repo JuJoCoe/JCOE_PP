@@ -74,19 +74,19 @@ int main(int argc, char *argv[]) {
 	    offset = stripSize;
 	    numElements = stripSize * N;
 	    for (i=1; i<numnodes; i++) {
-	     	printf("offset = %d\n", offset);
-	      	MPI_Send(A[offset], numElements, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
-	      	offset += stripSize;
+	    	MPI_Send(A[offset], numElements, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
+	    	offset += stripSize;
 	    }
+	    MPI_Barrier(MPI_COMM_WORLD)
 	  }
 	  else {  // receive my part of A
 	    MPI_Recv(A[0], stripSize * N, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+	    MPI_Barrier(MPI_COMM_WORLD)
 	  }
 
 
 
 
-	printf("A[%d] = %f\n", 1, A[1]);
 
 
 	for(i = 0; i < N; i++){

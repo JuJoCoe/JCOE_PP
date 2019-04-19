@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
 
 
 	stripSize = N/numnodes;
-	printf("numnodes = %d\n, numnodes);
+	printf("numnodes = %d\n", numnodes);
 
 	for(number = 1; number < 10; number++){
 

@@ -92,7 +92,7 @@ int main(int argc, char *argv[]) {
 	    printf("number = %d from node %s, rank %d\n", number, processor_name, myrank);
 	  }
 
-
+	 MPI_Barrier(MPI_COMM_WORLD);
 	}
 
 

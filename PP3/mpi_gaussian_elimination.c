@@ -77,11 +77,11 @@ int main(int argc, char *argv[]) {
 	    	MPI_Send(A[offset], numElements, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
 	    	offset += stripSize;
 	    }
-	    MPI_Barrier(MPI_COMM_WORLD)
+	    MPI_Barrier(MPI_COMM_WORLD);
 	  }
 	  else {  // receive my part of A
 	    MPI_Recv(A[0], stripSize * N, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-	    MPI_Barrier(MPI_COMM_WORLD)
+	    MPI_Barrier(MPI_COMM_WORLD);
 	  }
 
 

@@ -80,17 +80,18 @@ int main(int argc, char *argv[]) {
 //	for(k = 0; k < N ; k++){
 
 	if (myrank == 0) {
-		float y = A[k][k];
-		for(int j = k+1; j < N; j++){
-			A[k][j] = A[k][j]/y;
-		}
+	//	float y = A[k][k];
+	//	for(int j = k+1; j < N; j++){
+	//		A[k][j] = A[k][j]/y;
+	//	}
 
-		b[k] = b[k]/y;
-		A[k][k] = 1.0;
+	//	b[k] = b[k]/y;
+	//	A[k][k] = 1.0;
 
-		int TotalIterations = N - (k);
-		int IterationsPerProcess = TotalIterations/numnodes;
-		int indexrow = k+1;
+		b[0] = 3;
+	//	int TotalIterations = N - (k);
+	//	int IterationsPerProcess = TotalIterations/numnodes;
+	//	int indexrow = k+1;
 
 	    offset = stripSize;
 	    numElements = stripSize * N;

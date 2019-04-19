@@ -121,7 +121,7 @@ int main(int argc, char *argv[]) {
 //myrank 0 sends a flag to see if the process will need to run this line of code
 
 	 MPI_Barrier(MPI_COMM_WORLD);
-	}
+	//}
 
 
 

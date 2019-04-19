@@ -88,8 +88,9 @@ int main(int argc, char *argv[]) {
 	  else {  // receive my part of A
 	    MPI_Recv(A[0], stripSize * N, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 	    MPI_Recv(&number, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-	    MPI_Barrier(MPI_COMM_WORLD);
 	    printf("number = %d from node %s, rank %d\n", number, processor_name, myrank);
+	    MPI_Barrier(MPI_COMM_WORLD);
+	    
 	  }
 
 	 MPI_Barrier(MPI_COMM_WORLD);

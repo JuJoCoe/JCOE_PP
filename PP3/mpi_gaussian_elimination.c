@@ -77,6 +77,7 @@ int main(int argc, char *argv[]) {
 	    numElements = stripSize * N;
 	    for (number = 1; number < 3; number++){
 	    for (i=1; i<numnodes; i++) {
+		printf("number = %d from node %s, rank %d\n", number, processor_name, myrank);    
 	    	MPI_Send(A[offset], numElements, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
 	    	MPI_Send(&number, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
 	    	offset += stripSize;

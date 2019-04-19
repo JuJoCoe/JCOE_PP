@@ -10,7 +10,7 @@ int main(int argc, char *argv[]) {
 	double startTime, endTime;
 	int myrank, numnodes, stripSize, offset, numElements;
 	int i, j, k;
-	int number;
+	int number = 0;
 
 	MPI_Init(&argc, &argv);
 
@@ -80,24 +80,30 @@ int main(int argc, char *argv[]) {
 //	for(k = 0; k < N ; k++){
 
 	if (myrank == 0) {
-	//	float y = A[k][k];
-	//	for(int j = k+1; j < N; j++){
-	//		A[k][j] = A[k][j]/y;
-	//	}
+//		float y = A[k][k];
+//		for(int j = k+1; j < N; j++){
+//			A[k][j] = A[k][j]/y;
+//		}
 
-	//	b[k] = b[k]/y;
-	//	A[k][k] = 1.0;
+//		b[k] = b[k]/y;
+//		A[k][k] = 1.0;
 
-		b[0] = 3;
-	//	int TotalIterations = N - (k);
-	//	int IterationsPerProcess = TotalIterations/numnodes;
-	//	int indexrow = k+1;
+//		int TotalIterations = N - (k);
+//		int IterationsPerProcess = TotalIterations/numnodes;
+//		int Remainder = TotalIterations%numnodes;
+//		int indexrow = k+1;
+
 
 	    offset = stripSize;
 	    numElements = stripSize * N;
 	    for (i=1; i<numnodes; i++) {
+	    	number = 1;
+	//    	int leftover = 0;
+	//    	if(Remainder != 0){
+	 //   		Remainder--;
+	 //   		leftover++;
+	// 		}
 	    	MPI_Send(A[offset], numElements, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
-	    	MPI_Send(b, N, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
 	    	offset += stripSize;
 	    }
 
@@ -105,16 +111,17 @@ int main(int argc, char *argv[]) {
 	  }
 	  else {  // receive my part of A
 	    MPI_Recv(A[0], stripSize * N, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-	    MPI_Recv(b, 1, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-	    printf("b[0] = %f from node %s, rank %d\n", b[0], processor_name, myrank);
+	    printf("number = %d from node %s, rank %d\n", number, processor_name, myrank);
 	    MPI_Barrier(MPI_COMM_WORLD);
 
 	  }
+//	float y = A[k][k];
+//	b[k] = b[k]/y;
 
 //myrank 0 sends a flag to see if the process will need to run this line of code
 
-	// MPI_Barrier(MPI_COMM_WORLD);
-	//}
+	 MPI_Barrier(MPI_COMM_WORLD);
+	}
 
 
 

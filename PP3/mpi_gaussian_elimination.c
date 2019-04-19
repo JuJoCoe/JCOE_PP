@@ -39,11 +39,10 @@ int main(int argc, char *argv[]) {
 
 	//Allocate b
 	b = (double *) malloc (sizeof(double ) * N);
-/*	for(i = 0; i < N; i++){
+	for(i = 0; i < N; i++){
 		b[i] = 1.0;
-		printf("b[%d] = %f\n",i, b[i]);
 	}
-	*/
+
 
 	//Allocate x
 	x = (double *) malloc (sizeof(double ) * N);
@@ -67,6 +66,27 @@ int main(int argc, char *argv[]) {
 		A[2][2] = 2;
 		b[2] = -3;
 	}
+
+
+	stripSize = N/numnodes;
+
+	if (myrank == 0) {
+	    offset = stripSize;
+	    numElements = stripSize * N;
+	    for (i=1; i<numnodes; i++) {
+	      MPI_Send(A[offset], numElements, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
+	      offset += stripSize;
+	    }
+	  }
+	  else {  // receive my part of A
+	    MPI_Recv(A[0], stripSize * N, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+	  }
+
+
+
+
+
+
 
 	for(i = 0; i < N; i++){
 		for(j=0; j < N; j++){

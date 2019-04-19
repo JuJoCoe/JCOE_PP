@@ -86,7 +86,7 @@ int main(int argc, char *argv[]) {
 
 
 
-	printf("A[%d] = %f\n", A[4]);
+	printf("A[%d] = %f\n", 1, A[1]);
 
 
 	for(i = 0; i < N; i++){

@@ -72,7 +72,7 @@ int main(int argc, char *argv[]) {
 	stripSize = N/numnodes;
 
 
-	for(number = 1; number < 3; number++){
+	for(number = 1; number < 10; number++){
 
 	if (myrank == 0) {
 	    offset = stripSize;

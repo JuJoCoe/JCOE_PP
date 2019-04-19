@@ -75,11 +75,12 @@ int main(int argc, char *argv[]) {
 	if (myrank == 0) {
 	    offset = stripSize;
 	    numElements = stripSize * N;
+	    for (number = 1; number < 3; number++){
 	    for (i=1; i<numnodes; i++) {
-	    	number += 1;
 	    	MPI_Send(A[offset], numElements, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
 	    	MPI_Send(&number, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
 	    	offset += stripSize;
+	    }
 	    }
 
 	    MPI_Barrier(MPI_COMM_WORLD);
@@ -88,6 +89,7 @@ int main(int argc, char *argv[]) {
 	    MPI_Recv(A[0], stripSize * N, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 	    MPI_Recv(&number, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 	    MPI_Barrier(MPI_COMM_WORLD);
+	    printf("number = %d from node %s, rank %d\n", number, processor_name, myrank);
 	  }
 
 
@@ -95,11 +97,12 @@ int main(int argc, char *argv[]) {
 
 
 
-
+/*
 	if(myrank == 0){
 	for(i = 0; i < N; i++){
 		for(j=0; j < N; j++){
 			printf("A[%d][%d] = %f from node %s, rank %d\n", i, j, A[i][j], processor_name, myrank);
+			printf("number = %d from node %s, rank %d\n", number, processor_name, myrank);
 		}
 		printf("b[%d] = %f from node %s, rank %d\n",i, b[i], processor_name, myrank);
 	}
@@ -113,7 +116,7 @@ int main(int argc, char *argv[]) {
 			printf("b[%d] = %f from node %s, rank %d\n",i, b[i], processor_name, myrank);
 		}
 	}
-
+*/
 
 
 

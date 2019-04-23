@@ -80,7 +80,6 @@ int main(int argc, char *argv[]) {
 	for(k = 0; k < N ; k++){
 
 	if (myrank == 0) {
-		number = 0;
 //		float y = A[k][k];
 //		for(int j = k+1; j < N; j++){
 //			A[k][j] = A[k][j]/y;
@@ -98,6 +97,7 @@ int main(int argc, char *argv[]) {
 	    offset = stripSize;
 	    numElements = stripSize * N;
 	    for (i=1; i<numnodes; i++) {
+		number = 0;
 	    	int leftover = 0;
 	    	if(Remainder != 0){
 	    		Remainder--;

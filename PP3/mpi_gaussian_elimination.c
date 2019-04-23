@@ -77,7 +77,7 @@ int main(int argc, char *argv[]) {
 	stripSize = N/numnodes;
 
 
-//	for(k = 0; k < N ; k++){
+	for(k = 0; k < N ; k++){
 
 	if (myrank == 0) {
 		number = 0;
@@ -131,7 +131,7 @@ int main(int argc, char *argv[]) {
 //myrank 0 sends a flag to see if the process will need to run this line of code
 
 	 MPI_Barrier(MPI_COMM_WORLD);
-	
+	}	
 
 
 

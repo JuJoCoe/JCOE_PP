@@ -80,6 +80,7 @@ int main(int argc, char *argv[]) {
 //	for(k = 0; k < N ; k++){
 
 	if (myrank == 0) {
+		number = 0;
 //		float y = A[k][k];
 //		for(int j = k+1; j < N; j++){
 //			A[k][j] = A[k][j]/y;
@@ -88,28 +89,35 @@ int main(int argc, char *argv[]) {
 //		b[k] = b[k]/y;
 //		A[k][k] = 1.0;
 
-//		int TotalIterations = N - (k);
-//		int IterationsPerProcess = TotalIterations/numnodes;
-//		int Remainder = TotalIterations%numnodes;
-//		int indexrow = k+1;
+		int TotalIterations = N - (k);
+		int IterationsPerProcess = TotalIterations/numnodes;
+		int Remainder = TotalIterations%numnodes;
+		int indexrow = k+1;
 
 
 	    offset = stripSize;
 	    numElements = stripSize * N;
 	    for (i=1; i<numnodes; i++) {
-	    	number = 1;
-	//    	int leftover = 0;
-	//    	if(Remainder != 0){
-	 //   		Remainder--;
-	 //   		leftover++;
-	// 		}
-	    	MPI_Send(A[offset], numElements, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
-	    	offset += stripSize;
+	    	int leftover = 0;
+	    	if(Remainder != 0){
+	    		Remainder--;
+	    		leftover++;
+	 		}
+	    	if(indexrow < IterationsPerProcess +leftover+indexrow){
+	    		number = 1;
+	    		MPI_Send(&number, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
+	    		MPI_Send(A[indexrow], IterationsPerProcess +leftover+indexrow, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
+	    		indexrow = indexrow + IterationsPerProcess + leftover;
+	    }else{
+	    	number = 0;
+	    	MPI_Send(&number, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
+	    }
 	    }
 
 	    MPI_Barrier(MPI_COMM_WORLD);
 	  }
-	  else {  // receive my part of A
+	  else {  // receive my part of
+		MPI_Recv(&number, 1, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 	    MPI_Recv(A[0], stripSize * N, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 	    printf("number = %d from node %s, rank %d\n", number, processor_name, myrank);
 	    MPI_Barrier(MPI_COMM_WORLD);
@@ -121,7 +129,7 @@ int main(int argc, char *argv[]) {
 //myrank 0 sends a flag to see if the process will need to run this line of code
 
 	 MPI_Barrier(MPI_COMM_WORLD);
-	//}
+	}
 
 
 

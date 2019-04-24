@@ -94,7 +94,7 @@ int main(int argc, char *argv[]) {
 	MPI_Barrier(MPI_COMM_WORLD);
 	if(myrank != 0){	
 	for(i = 0; i < 1; i++){
-		for(j=0; j < 1; j++){
+		for(j=0; j < N; j++){
 			A[i][j] = k;
 			printf("A[%d][%d] = %f from node %s, rank %d\n", i, j, A[i][j], processor_name, myrank);
 			}

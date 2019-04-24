@@ -94,7 +94,7 @@ int main(int argc, char *argv[]) {
 		printf("k = %d from %s, rank %d\n", k, processor_name, myrank);
 
 
-	 MPI_Waitall(MPI_COMM_WORLD);
+	 MPI_Barrier(MPI_COMM_WORLD);
 	}
 
 

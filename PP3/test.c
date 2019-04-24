@@ -85,11 +85,12 @@ int main(int argc, char *argv[]) {
 	    for (i=1; i<numnodes; i++) {
 	      MPI_Send(A[offset], numElements, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
 	      offset += stripSize;
-
+	      MPI_Barrier(MPI_COMM_WORLD);
 	    }
 	  }
 	  else {  // receive my part of A
 	    MPI_Recv(A[0], stripSize * N, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+	    MPI_Barrier(MPI_COMM_WORLD);
 
 	  }
 
@@ -100,14 +101,15 @@ int main(int argc, char *argv[]) {
 		}
 
 	if(myrank == 0){
-		offset = stripSize;
 		 for (i=1; i<numnodes; i++) {
 			MPI_Recv(A[offset], numElements, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 			offset += stripSize;
+			
 		 }
 	}else{
 		number = k;
 		MPI_Send(A[0], stripSize * N, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD);
+		MPI_Barrier(MPI_COMM_WORLD);
 	}
 
 	if(myrank == 0){

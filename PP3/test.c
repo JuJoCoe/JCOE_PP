@@ -77,7 +77,7 @@ int main(int argc, char *argv[]) {
 	stripSize = N/numnodes;
 
 
-//	for(k = 0; k < N ; k++){
+	for(k = 0; k < N ; k++){
 
 	if (myrank == 0) {
 	    offset = stripSize;
@@ -91,15 +91,15 @@ int main(int argc, char *argv[]) {
 	    MPI_Recv(A[0], stripSize * N, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 	  }
 
+		printf("k = %d from %s, rank %d\n", k, processor_name, myrank);
+
+
+	 MPI_Barrier(MPI_COMM_WORLD);
+	}
 
 
 
-//	 MPI_Barrier(MPI_COMM_WORLD);
-//	}
-
-
-
-
+/*
 	if(myrank == 0){
 	for(i = 0; i < N; i++){
 		for(j=0; j < N; j++){
@@ -119,7 +119,7 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
-
+*/
 
 
 

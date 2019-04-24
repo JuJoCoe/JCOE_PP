@@ -91,7 +91,7 @@ int main(int argc, char *argv[]) {
 	  else {  // receive my part of A
 	    MPI_Recv(A[0], stripSize * N, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 	  }
-
+	MPI_Barrier(MPI_COMM_WORLD);
 	if(myrank != 0){	
 	for(i = 0; i < 1; i++){
 		for(j=0; j < 1; j++){
@@ -99,6 +99,7 @@ int main(int argc, char *argv[]) {
 			}
 		}
 	}
+	MPI_Barrier(MPI_COMM_WORLD);	
 	if(myrank == 0){
 		 for (i=1; i<numnodes; i++) {
 			MPI_Recv(A[offset], numElements, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);

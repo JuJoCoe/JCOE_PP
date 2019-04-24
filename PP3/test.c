@@ -103,11 +103,13 @@ int main(int argc, char *argv[]) {
 	MPI_Barrier(MPI_COMM_WORLD);	
 	if(myrank == 0){
 		 for (i=1; i<numnodes; i++) {
+			printf("receiving\n"); 
 			MPI_Recv(A[offset], numElements, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 			offset += stripSize;
 			
 		 }
 	}else{
+		printf("sending\n");
 		MPI_Send(A[0], stripSize * N, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD);
 	}
 

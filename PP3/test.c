@@ -96,7 +96,7 @@ int main(int argc, char *argv[]) {
 	for(i = 0; i < 1; i++){
 		for(j=0; j < N; j++){
 			A[i][j] = k;
-			printf("A[%d][%d] = %f from node %s, rank %d\n", i, j, A[i][j], processor_name, myrank);
+	//		printf("A[%d][%d] = %f from node %s, rank %d\n", i, j, A[i][j], processor_name, myrank);
 			}
 		}
 	}

@@ -102,6 +102,7 @@ int main(int argc, char *argv[]) {
 	}
 	MPI_Barrier(MPI_COMM_WORLD);	
 	if(myrank == 0){
+		offset = stripSize;
 		 for (i=1; i<numnodes; i++) {
 			printf("receiving\n"); 
 			MPI_Recv(A[offset], numElements, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);

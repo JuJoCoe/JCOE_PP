@@ -100,6 +100,7 @@ int main(int argc, char *argv[]) {
 		}
 
 	if(myrank == 0){
+		offset = stripSize;
 		 for (i=1; i<numnodes; i++) {
 			MPI_Recv(A[offset], numElements, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 			offset += stripSize;

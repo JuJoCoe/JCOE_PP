@@ -80,7 +80,7 @@ int main(int argc, char *argv[]) {
 
 	//	 begin1 =clock();
 
-		    MPI_Bcast (A,N*N,MPI_DOUBLE,0,MPI_COMM_WORLD);
+		   MPI_Bcast (&A[0],9,MPI_DOUBLE,0,MPI_COMM_WORLD);
 		    MPI_Bcast (b,N,MPI_DOUBLE,0,MPI_COMM_WORLD);
 
 		    for(i=0; i<N; i++)

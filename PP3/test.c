@@ -90,7 +90,7 @@ int main(int argc, char *argv[]) {
 	    	if(k == 2){
 	    		number = 2;
 	    		MPI_Send(&number, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
-	   // 		MPI_Send(A[offset], numElements, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
+	    		MPI_Send(A[offset], numElements, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
 	    		offset += stripSize;
 	    	}else{
 	    		number = 1;
@@ -112,7 +112,11 @@ int main(int argc, char *argv[]) {
 	if(myrank != 0){
 	for(i = 0; i < 1; i++){
 		for(j=0; j < N; j++){
+			if(number != 2){
 			A[i][j] = k;
+			}else{
+				A[i][j] = 3;
+			}
 			}
 		}
 	}

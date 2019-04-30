@@ -7,6 +7,7 @@
 int main(int argc, char *argv[]) {
 	double **A, *b, *x, *tmp;
 	int map[3];
+	int C[3];
 	int N = 2000;
 	double startTime, endTime;
 	int myrank, numnodes, stripSize, offset, numElements;
@@ -95,7 +96,7 @@ int main(int argc, char *argv[]) {
 		        {
 		            if(map[i] == myrank)
 		            {
-		                tmp[i]=A[i][k]/A[k][k];
+		                C[i]=A[i][k]/A[k][k];
 		            }
 		        }
 		        for(i= k+1; i<N; i++)
@@ -104,9 +105,9 @@ int main(int argc, char *argv[]) {
 		            {
 		                for(j=0;j<N;j++)
 		                {
-		                    A[i][j]=A[i][j]-( tmp[i]*A[k][j] );
+		                    A[i][j]=A[i][j]-( C[i]*A[k][j] );
 		                }
-		                b[i]=b[i]-( tmp[i]*b[k] );
+		                b[i]=b[i]-( C[i]*b[k] );
 		            }
 		        }
 		    }

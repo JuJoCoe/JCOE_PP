@@ -11,6 +11,8 @@ int main(int argc, char *argv[]) {
 	int myrank, numnodes, stripSize, offset, numElements;
 	int i, j, k;
 	int number = 0;
+	double y;
+	int indexrow;
 
 	MPI_Init(&argc, &argv);
 
@@ -78,50 +80,79 @@ int main(int argc, char *argv[]) {
 
 
 	for(k = 0; k < N ; k++){
-
+		if (myrank == 0){
+		y = A[k][k];
+		for(int j = k+1; j < N+1; j++){
+			A[k][j] = A[k][j]/y;
+		}
+		A[k][k] = 1.0;
+		}
+		b[k] = b[k]/y;
 
 
 	if (myrank == 0) {
+
+		//Calculates total number of times the inner loop will run
+			int TotalIterations = N - (k);
+				//Calculates the total number of iteration each thread will run
+			int IterationsPerThread = TotalIterations/numnodes;
+				//Left over iterations that will be given to some threads
+			int Remainder = TotalIterations%numnodes;
+				//Which indexrow to start at
+			indexrow = k+1;
+
+
 	    offset = stripSize;
 	    numElements = stripSize * N;
 
 
 	    for (i=1; i<numnodes; i++) {
-	    	if(k == 2){
-	    		number = 2;
-	    		MPI_Send(&number, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
-	    		MPI_Send(A[offset], numElements, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
-	    		offset += stripSize;
-	    	}else{
+	    	int leftover = 0;
+
+	    	if(Remainder != 0){
+	    		Remainder--;
+	    		leftover++;
+	    	}
+
+	    	if(indexrow < IterationsPerThread +leftover+indexrow){
 	    		number = 1;
 	    		MPI_Send(&number, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
-	    		MPI_Send(A[offset], numElements, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
+	    		MPI_Send(A[offset], IterationsPerThread + leftover + indexrow, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
+	    		indexrow = indexrow + IterationsPerThread + leftover;
+	    	}else{
+	    		number = 0;
+	    		MPI_Send(&number, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
+	   // 		MPI_Send(A[offset], numElements, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
 	    		offset += stripSize;
 	    	}
 	    }
 	  }
 
 	  else {  // receive my part of A
-		  MPI_Recv(&number, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-		  if(number != 2){
+		MPI_Recv(&number, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+		if(number == 1){
 	    MPI_Recv(A[0], stripSize * N, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-		  }
+		}
 	  }
 
 	MPI_Barrier(MPI_COMM_WORLD);
-	if(myrank != 0){
-	for(i = 0; i < 1; i++){
-		for(j=0; j < N; j++){
-			if(number != 2){
-			A[i][j] = k;
-			}else{
-				A[i][j] = 3;
-			}
+
+	//multithreading work
+	if(myrank != 0 && number == 1){
+		for(i = 0; i < 1; i++){
+			for(j=0; j < N; j++){
+				A[i][j] = k;
+				}
 			}
 		}
-	}
+
 
 	MPI_Barrier(MPI_COMM_WORLD);
+
+
+
+
+	//Receive Finished row
 	if(myrank == 0){
 		offset = stripSize;
 		 for (i=1; i<numnodes; i++) {
@@ -130,25 +161,13 @@ int main(int argc, char *argv[]) {
 
 		 }
 
+	//Send Finished Row
 	}else{
 		MPI_Send(A[0], stripSize * N, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD);
 	}
 
-	if(myrank == 0){
-		for(i = 0; i < N; i++){
-				for(j=0; j < N; j++){
-					printf("A[%d][%d] = %f from node %s, rank %d\n", i, j, A[i][j], processor_name, myrank);
-				}
-		}
-	}
 
-
-
-
-	printf("number = %d from node %s, rank %d\n", number, processor_name, myrank);
-
-
-	 MPI_Barrier(MPI_COMM_WORLD);
+	MPI_Barrier(MPI_COMM_WORLD);
 	}
 
 

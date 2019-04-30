@@ -6,6 +6,7 @@
 
 int main(int argc, char *argv[]) {
 	double **A, *b, *x, *tmp;
+	int map[3];
 	int N = 2000;
 	double startTime, endTime;
 	int myrank, numnodes, stripSize, offset, numElements;
@@ -70,129 +71,76 @@ int main(int argc, char *argv[]) {
 		b[2] = -3;
 	}
 
-	b[0] = 8;
-	b[1] = -11;
-	b[2] = -3;
-
-
-	//numnodes = number of processes
-	stripSize = N/numnodes;
-
-
-	for(k = 0; k < N ; k++){
-		if (myrank == 0){
-		y = A[k][k];
-		for(int j = k+1; j < N+1; j++){
-			A[k][j] = A[k][j]/y;
-		}
-		A[k][k] = 1.0;
-		}
-		b[k] = b[k]/y;
-
-
-	if (myrank == 0) {
-
-		//Calculates total number of times the inner loop will run
-			int TotalIterations = N - (k);
-				//Calculates the total number of iteration each thread will run
-			int IterationsPerThread = TotalIterations/numnodes;
-				//Left over iterations that will be given to some threads
-			int Remainder = TotalIterations%numnodes;
-				//Which indexrow to start at
-			indexrow = k+1;
-
-
-	    offset = stripSize;
-	    numElements = stripSize * N;
-
-
-	    for (i=1; i<numnodes; i++) {
-	    	int leftover = 0;
-
-	    	if(Remainder != 0){
-	    		Remainder--;
-	    		leftover++;
-	    	}
-
-	    	if(indexrow < IterationsPerThread +leftover+indexrow){
-	    		number = 1;
-	    		MPI_Send(&number, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
-	    		MPI_Send(A[offset], IterationsPerThread + leftover + indexrow, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
-	    		indexrow = indexrow + IterationsPerThread + leftover;
-	    	}else{
-	    		number = 0;
-	    		MPI_Send(&number, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
-	   // 		MPI_Send(A[offset], numElements, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
-	    		offset += stripSize;
-	    	}
-	    }
-	  }
-
-	  else {  // receive my part of A
-		MPI_Recv(&number, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-		if(number == 1){
-	    MPI_Recv(A[0], stripSize * N, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-		}
-	  }
-
-	MPI_Barrier(MPI_COMM_WORLD);
-
-	//multithreading work
-	if(myrank != 0 && number == 1){
-		for(i = 0; i < 1; i++){
-			for(j=0; j < N; j++){
-				A[i][j] = k;
-				}
-			}
-		}
-
-
-	MPI_Barrier(MPI_COMM_WORLD);
+		b[0] = 8;
+		b[1] = -11;
+		b[2] = -3;
 
 
 
+	//	 begin1 =clock();
 
-	//Receive Finished row
-	if(myrank == 0){
-		offset = stripSize;
-		 for (i=1; i<numnodes; i++) {
-			MPI_Recv(A[offset], numElements, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-			offset += stripSize;
+		    MPI_Bcast (A,N*N,MPI_DOUBLE,0,MPI_COMM_WORLD);
+		    MPI_Bcast (b,N,MPI_DOUBLE,0,MPI_COMM_WORLD);
 
-		 }
+		    for(i=0; i<N; i++)
+		    {
+		        map[i]= i % numnodes;
+		    }
 
-	//Send Finished Row
-	}else{
-		MPI_Send(A[0], stripSize * N, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD);
-	}
+		    for(k=0;k<N;k++)
+		    {
+		        MPI_Bcast (&A[k][k],N-k,MPI_DOUBLE,map[k],MPI_COMM_WORLD);
+		        MPI_Bcast (&b[k],1,MPI_DOUBLE,map[k],MPI_COMM_WORLD);
+		        for(i= k+1; i<N; i++)
+		        {
+		            if(map[i] == myrank)
+		            {
+		                tmp[i]=A[i][k]/A[k][k];
+		            }
+		        }
+		        for(i= k+1; i<N; i++)
+		        {
+		            if(map[i] == myrank)
+		            {
+		                for(j=0;j<N;j++)
+		                {
+		                    A[i][j]=A[i][j]-( tmp[i]*A[k][j] );
+		                }
+		                b[i]=b[i]-( tmp[i]*b[k] );
+		            }
+		        }
+		    }
+		 //   end1 = clock();
 
+		//////////////////////////////////////////////////////////////////////////////////
 
-	MPI_Barrier(MPI_COMM_WORLD);
-	}
+	//	    begin2 =clock();
 
+		    if (myrank==0)
+		    {
+		    x[N-1]=b[N-1]/A[N-1][N-1];
+		    for(i=N-2;i>=0;i--)
+		    {
+		        double sum=0.0;
 
+		        for(j=i+1;j<N;j++)
+		        {
+		            sum=sum+A[i][j]*x[j];
+		        }
+		        x[i]=(b[i]-sum)/A[i][i];
+		    }
 
-/*
-	if(myrank == 0){
-	for(i = 0; i < N; i++){
-		for(j=0; j < N; j++){
-			printf("A[%d][%d] = %f from node %s, rank %d\n", i, j, A[i][j], processor_name, myrank);
-//			printf("number = %d from node %s, rank %d\n", number, processor_name, myrank);
-		}
-//		printf("b[%d] = %f from node %s, rank %d\n",i, b[i], processor_name, myrank);
-	}
-	}
-	else {
-		for(i = 0; i < 1; i++){
-			for(j=0; j < N; j++){
-				printf("A[%d][%d] = %f from node %s, rank %d\n", i, j, A[i][j], processor_name, myrank);
-//				printf("number = %d from node %s, rank %d\n", number, processor_name, myrank);
-			}
-//			printf("b[%d] = %f from node %s, rank %d\n",i, b[i], processor_name, myrank);
-		}
-	}
+	//	    end2 = clock();
+		    }
+		//////////////////////////////////////////////////////////////////////////////////
+		    if (myrank==0){
+		        printf("\nThe solution is:");
+		        for(i=0;i<N;i++)
+		        {
+		            printf("\nx%d=%f\t",i,x[i]);
 
-*/
+		        }
+		    }
 
 
 
@@ -200,24 +148,7 @@ int main(int argc, char *argv[]) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	MPI_Finalize();
+    MPI_Finalize();
 	return 0;
 
 

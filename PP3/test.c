@@ -93,7 +93,7 @@ int main(int argc, char *argv[]) {
 	    		MPI_Send(A[offset], numElements, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
 	    		offset += stripSize;
 	    	}else{
-	    		MPI_Send(&number, 1, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
+	    		MPI_Send(&number, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
 	      MPI_Send(A[offset], numElements, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
 	      offset += stripSize;
 	    	}

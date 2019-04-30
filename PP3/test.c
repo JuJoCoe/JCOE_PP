@@ -79,38 +79,50 @@ int main(int argc, char *argv[]) {
 
 	for(k = 0; k < N ; k++){
 
+
+
 	if (myrank == 0) {
 	    offset = stripSize;
 	    numElements = stripSize * N;
+
+
 	    for (i=1; i<numnodes; i++) {
+	    	if(k == 2){
+	    		MPI_Send(1, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
+	    		MPI_Send(A[offset], numElements, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
+	    		offset += stripSize;
+	    	}else{
+	    		MPI_Send(2, 1, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
 	      MPI_Send(A[offset], numElements, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
 	      offset += stripSize;
-	      
+	    	}
 	    }
 	  }
+
 	  else {  // receive my part of A
+		  MPI_Recv(&number, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 	    MPI_Recv(A[0], stripSize * N, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 	  }
+
 	MPI_Barrier(MPI_COMM_WORLD);
-	if(myrank != 0){	
+	if(myrank != 0){
 	for(i = 0; i < 1; i++){
 		for(j=0; j < N; j++){
 			A[i][j] = k;
-	//		printf("A[%d][%d] = %f from node %s, rank %d\n", i, j, A[i][j], processor_name, myrank);
 			}
 		}
 	}
-	MPI_Barrier(MPI_COMM_WORLD);	
+
+	MPI_Barrier(MPI_COMM_WORLD);
 	if(myrank == 0){
 		offset = stripSize;
 		 for (i=1; i<numnodes; i++) {
-			printf("receiving\n"); 
 			MPI_Recv(A[offset], numElements, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 			offset += stripSize;
-			
+
 		 }
+
 	}else{
-		printf("sending\n");
 		MPI_Send(A[0], stripSize * N, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD);
 	}
 
@@ -125,7 +137,7 @@ int main(int argc, char *argv[]) {
 
 
 
-
+	printf("number = %d from node $s, rank %d\n", number, processor_name, myrank);
 
 
 	 MPI_Barrier(MPI_COMM_WORLD);

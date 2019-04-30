@@ -88,11 +88,12 @@ int main(int argc, char *argv[]) {
 
 	    for (i=1; i<numnodes; i++) {
 	    	if(k == 2){
-	    		MPI_Send(1, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
+			number = 2;
+	    		MPI_Send(&number, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
 	    		MPI_Send(A[offset], numElements, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
 	    		offset += stripSize;
 	    	}else{
-	    		MPI_Send(2, 1, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
+	    		MPI_Send(&number, 1, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
 	      MPI_Send(A[offset], numElements, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
 	      offset += stripSize;
 	    	}

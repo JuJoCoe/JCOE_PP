@@ -150,6 +150,7 @@ int main(int argc, char *argv[]) {
 			}
 	}
 
+		printf("Completed row operations %d\n", k);
 	MPI_Barrier(MPI_COMM_WORLD);
 	if(myrank == 0){
 		//Calculates total number of times the inner loop will run

@@ -83,7 +83,7 @@ int main(int argc, char *argv[]) {
 
 		if (myrank == 0){
 			y = A[k][k];
-			for(int j = k+1; j < n+1; j++){
+			for(int j = k+1; j < N; j++){
 				A[k][j] = A[k][j]/y;
 			}
 			A[k][k] = 1.0;
@@ -132,7 +132,7 @@ int main(int argc, char *argv[]) {
 		MPI_Recv(&size, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 	    MPI_Recv(A[0], size, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 		  }
-	  }
+
 
 	MPI_Barrier(MPI_COMM_WORLD);
 	if(number == 1){

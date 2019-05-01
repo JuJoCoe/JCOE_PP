@@ -213,6 +213,14 @@ if(myrank == 0){
 
 	}
 
+	if(N < 10){
+		//Print outputs
+		printf("\n");
+		printf("X Outputs:\n");
+		for(int l = 0; l <= N-1; l++){
+			 printf("x%d = %f\n", l, x[l]);
+		}
+	}
 
 
 

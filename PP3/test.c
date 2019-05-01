@@ -202,27 +202,16 @@ int main(int argc, char *argv[]) {
 
 
 
-/*
-	if(myrank == 0){
-	for(i = 0; i < N; i++){
-		for(j=0; j < N; j++){
-			printf("A[%d][%d] = %f from node %s, rank %d\n", i, j, A[i][j], processor_name, myrank);
-//			printf("number = %d from node %s, rank %d\n", number, processor_name, myrank);
-		}
-//		printf("b[%d] = %f from node %s, rank %d\n",i, b[i], processor_name, myrank);
-	}
-	}
-	else {
-		for(i = 0; i < 1; i++){
-			for(j=0; j < N; j++){
-				printf("A[%d][%d] = %f from node %s, rank %d\n", i, j, A[i][j], processor_name, myrank);
-//				printf("number = %d from node %s, rank %d\n", number, processor_name, myrank);
+if(myrank == 0){
+		for(int i=N-1; i >= 0; i--){
+			x[i] = b[i];
+				for(int j=N-1; j > i; j--){
+					x[i] = x[i] - A[i][j] * x[j];
+				 }
+					x[i] = x[i]/A[i][i];
 			}
-//			printf("b[%d] = %f from node %s, rank %d\n",i, b[i], processor_name, myrank);
-		}
-	}
 
-*/
+	}
 
 
 

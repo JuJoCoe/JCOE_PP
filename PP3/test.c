@@ -120,10 +120,10 @@ int main(int argc, char *argv[]) {
 	    		indexrow = indexrow + IterationsPerThread + leftover;
 	    	}else{
 	    		number = 0;
-	    		int size = 0;
+	    		int size = 1;
 	    		MPI_Send(&number, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
 	    		MPI_Send(&size, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
-	    		MPI_Send(A[0], 0, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
+	    		MPI_Send(A[0], 1, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
 	    	}
 		    printf("Sent first time %d\n", k); 
 	    	}

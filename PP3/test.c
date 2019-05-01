@@ -163,7 +163,7 @@ int main(int argc, char *argv[]) {
 
 			    	if(indexrow < IterationsPerThread +leftover+indexrow){
 			    		number = 1;
-			    		int size = IterationsPerThread + leftover + indexrow;
+			    		int size = N + (N * leftover);
 			    		MPI_Recv(A[indexrow], IterationsPerThread + leftover + indexrow, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 			    		indexrow = indexrow + IterationsPerThread + leftover;
 			    	}

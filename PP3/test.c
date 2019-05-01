@@ -95,7 +95,7 @@ int main(int argc, char *argv[]) {
 	if (myrank == 0) {
 
 		//Calculates total number of times the inner loop will run
-		int TotalIterations = N - (k);
+		int TotalIterations = N - (k+1);
 					//Calculates the total number of iteration each thread will run
 		int IterationsPerThread = TotalIterations/numnodes;
 					//Left over iterations that will be given to some threads
@@ -147,7 +147,7 @@ int main(int argc, char *argv[]) {
 	MPI_Barrier(MPI_COMM_WORLD);
 	if(myrank == 0){
 		//Calculates total number of times the inner loop will run
-				int TotalIterations = N - (k);
+				int TotalIterations = N - (k+1);
 							//Calculates the total number of iteration each thread will run
 				int IterationsPerThread = TotalIterations/numnodes;
 							//Left over iterations that will be given to some threads

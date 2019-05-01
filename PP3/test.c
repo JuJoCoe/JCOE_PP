@@ -138,10 +138,16 @@ int main(int argc, char *argv[]) {
 			printf("Recieved first time %d\n", k); 
 		  }
 
-
 	MPI_Barrier(MPI_COMM_WORLD);
 	if(number == 1){
-		A[0][0] = 1000 + k;
+		for(int s = 0; s<(size/N); s++){
+			float z = A[s][k];
+			for(int l = k+1; l<N; l++){
+				A[s][l] = A[s][l] - z*A[k][l];
+			}
+				b[s] = b[s] - A[s][k] * b[k];
+				A[s][k] = 0.0;
+			}
 	}
 
 	MPI_Barrier(MPI_COMM_WORLD);

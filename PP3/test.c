@@ -125,12 +125,14 @@ int main(int argc, char *argv[]) {
 	    		MPI_Send(&size, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
 	    		MPI_Send(A[0], 0, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
 	    	}
+		    printf("Sent first time %d\n", k); 
 	    	}
 	    }
 		else {  // receive my part of A
 		MPI_Recv(&number, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 		MPI_Recv(&size, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 	    MPI_Recv(A[0], size, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+			printf("Recieved first time %d\n", k); 
 		  }
 
 
@@ -164,10 +166,12 @@ int main(int argc, char *argv[]) {
 			    		MPI_Recv(A[indexrow], IterationsPerThread + leftover + indexrow, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 			    		indexrow = indexrow + IterationsPerThread + leftover;
 			    	}
+				    printf("Recieved Second time %d\n", k); 
 			    }
 	}else{
 		if(number == 1){
 		MPI_Send(A[0], size, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD);
+			printf("Sent Second time %d\n", k); 
 		}
 	}
 

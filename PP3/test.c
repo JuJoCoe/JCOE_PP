@@ -115,6 +115,7 @@ int main(int argc, char *argv[]) {
 	    	if(indexrow < IterationsPerThread +leftover+indexrow){
 	    		number = 1;
 	    		int size = N * IterationsPerThread + leftover;
+			printf("sending size = %d\n", size);
 	    		MPI_Send(&number, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
 	    		MPI_Send(&size, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
 	    		MPI_Send(A[indexrow], size, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);

@@ -7,92 +7,69 @@ int main(int argc, char **argv)
 {
     MPI_Init(&argc, &argv);
 
- //   double **A, *b, *x, *c, *tmp;
     int i,j,k;
- //   int sum;
-    int map[2000];
-    float A[1000][1000],b[1000],c[1000],x[1000],sum=0.0;
+    int map[500];
+    float A[500][500],b[500],c[500],x[500],sum=0.0;
     double range=1.0;
-    int N=1000;
-    int myrank, numnodes;
+    int n=3;
+    int rank, nprocs;
     clock_t begin1, end1, begin2, end2;
     MPI_Status status;
 
-    MPI_Comm_rank(MPI_COMM_WORLD, &myrank);   /* get current process id */
-    MPI_Comm_size(MPI_COMM_WORLD, &numnodes); /* get number of processes */
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);   /* get current process id */
+    MPI_Comm_size(MPI_COMM_WORLD, &nprocs); /* get number of processes */
 
 //////////////////////////////////////////////////////////////////////////////////
-/*
-    //Allocate A
-    	if (myrank == 0) {
-    	    tmp = (double *) malloc (sizeof(double ) * N * N);
-    	    A = (double **) malloc (sizeof(double *) * N);
-    	    for (i = 0; i < N; i++)
-    	      A[i] = &tmp[i * N];
-    	  }else{
-    		tmp = (double *) malloc (sizeof(double ) * N * N / numnodes);
-    		A = (double **) malloc (sizeof(double *) * N / numnodes);
-    		for (i = 0; i < N / numnodes; i++)
-    		  A[i] = &tmp[i * N];
-    		  }
 
-    	//Allocate b
-    	b = (double *) malloc (sizeof(double ) * N);
-    	for(i = 0; i < N; i++){
-    		b[i] = 1.0;
-    	}
+    if (rank==0)
+    {
+        for (i=0; i<n; i++)
+        {
+        for (j=0; j<n; j++)
+        A[i][j]=range*(1.0-2.0*(double)rand()/RAND_MAX);
+        b[i]=range*(1.0-2.0*(double)rand()/RAND_MAX);
+        }
+        printf("\n Matrix A (generated randomly):\n");
+        for (i=0; i<n; i++)
+        {
+            for (j=0; j<n; j++)
+            printf("%9.6lf ",A[i][j]);
+        printf("\n");
+        }
+        printf("\n Vector b (generated randomly):\n");
+        for (i=0; i<n; i++)
+            printf("%9.6lf ",b[i]);
+        printf("\n\n");
+    }
 
-
-    	//Allocate x
-    	x = (double *) malloc (sizeof(double ) * N);
-    		for(i = 0; i < N; i++){
-    			x[i] = 0.0;
-    		}
-*/
-    		if(myrank == 0){
-    						srand(1);
-    						for(int i = 0; i < N; i++){
-    							for(int j = 0; j < N; j++){
-    							 	A[i][j] = (rand() % 11) - 5;
-    							 	if(A[i][j] == 0){
-    							 		A[i][j] = 1;
-    							 			}
-    							 		 }
-    							 		 b[i] = rand() % (10 + 1 - 0) + 0;
-    							 		 if(b[i] == 0){
-    							 			 b[i] = 1;
-    							 		 }
-    							 	 	 }
-
-    					}
 //////////////////////////////////////////////////////////////////////////////////
 
     begin1 =clock();
 
-    MPI_Bcast (A,N*N,MPI_DOUBLE,0,MPI_COMM_WORLD);
-    MPI_Bcast (b,N,MPI_DOUBLE,0,MPI_COMM_WORLD);
+    MPI_Bcast (A,n*n,MPI_DOUBLE,0,MPI_COMM_WORLD);
+    MPI_Bcast (b,n,MPI_DOUBLE,0,MPI_COMM_WORLD);    
 
-    for(i=0; i<N; i++)
+    for(i=0; i<n; i++)
     {
-        map[i]= i % numnodes;
-    }
+        map[i]= i % nprocs;
+    } 
 
-    for(k=0;k<N;k++)
+    for(k=0;k<n;k++)
     {
-        MPI_Bcast (&A[k][k],N-k,MPI_DOUBLE,map[k],MPI_COMM_WORLD);
+        MPI_Bcast (&A[k][k],n-k,MPI_DOUBLE,map[k],MPI_COMM_WORLD);
         MPI_Bcast (&b[k],1,MPI_DOUBLE,map[k],MPI_COMM_WORLD);
-        for(i= k+1; i<N; i++)
+        for(i= k+1; i<n; i++) 
         {
-            if(map[i] == myrank)
+            if(map[i] == rank)
             {
                 c[i]=A[i][k]/A[k][k];
             }
-        }
-        for(i= k+1; i<N; i++)
-        {
-            if(map[i] == myrank)
+        }               
+        for(i= k+1; i<n; i++) 
+        {       
+            if(map[i] == rank)
             {
-                for(j=0;j<N;j++)
+                for(j=0;j<n;j++)
                 {
                     A[i][j]=A[i][j]-( c[i]*A[k][j] );
                 }
@@ -106,14 +83,14 @@ int main(int argc, char **argv)
 
     begin2 =clock();
 
-    if (myrank==0)
-    {
-    x[N-1]=b[N-1]/A[N-1][N-1];
-    for(i=N-2;i>=0;i--)
+    if (rank==0)
+    { 
+    x[n-1]=b[n-1]/A[n-1][n-1];
+    for(i=n-2;i>=0;i--)
     {
         sum=0;
 
-        for(j=i+1;j<N;j++)
+        for(j=i+1;j<n;j++)
         {
             sum=sum+A[i][j]*x[j];
         }
@@ -123,12 +100,12 @@ int main(int argc, char **argv)
     end2 = clock();
     }
 //////////////////////////////////////////////////////////////////////////////////
-    if (myrank==0)
-    {
+    if (rank==0)
+    { 
         printf("\nThe solution is:");
-        for(i=0;i<N;i++)
+        for(i=0;i<n;i++)
         {
-      //      printf("\nx%d=%f\t",i,x[i]);
+            printf("\nx%d=%f\t",i,x[i]);
 
         }
 
@@ -136,7 +113,7 @@ int main(int argc, char **argv)
         printf("\nBack substitution time: %f\n", (double)(end2 - begin2) / CLOCKS_PER_SEC);
     }
 
-
     MPI_Finalize();
     return(0);
+
 }

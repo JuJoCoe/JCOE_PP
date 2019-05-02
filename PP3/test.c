@@ -223,7 +223,7 @@ int main(int argc, char *argv[]) {
 		printf("\n");
 		printf("X Outputs:\n");
 		for(int l = 0; l < N; l++){
-			 printf("x%d = %f\n", l, x[l]);
+		//	 printf("x%d = %f\n", l, x[l]);
 		}
 	}
 	}

@@ -37,9 +37,9 @@ int main(int argc, char *argv[]) {
 	      A[i] = &tmp[i * N];
 	  }
 	  else {
-	    tmp = (double *) malloc (sizeof(double ) * N * N / numnodes);
-	    A = (double **) malloc (sizeof(double *) * N / numnodes);
-	    for (i = 0; i < N / numnodes; i++)
+	    tmp = (double *) malloc (sizeof(double ) * N * N);
+	    A = (double **) malloc (sizeof(double *) * N);
+	    for (i = 0; i < N; i++)
 	      A[i] = &tmp[i * N];
 	  }
 
@@ -127,8 +127,8 @@ int main(int argc, char *argv[]) {
 	    	}
 	    }
 		else {  // receive my part of A
-		MPI_Recv(number, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-		MPI_Recv(size, 1, MPI_INT, 0, TAG+1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+		MPI_Recv(&number, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+		MPI_Recv(&size, 1, MPI_INT, 0, TAG+1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 	        MPI_Recv(A[0], size, MPI_DOUBLE, 0, TAG+2, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
 		  }

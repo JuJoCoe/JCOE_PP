@@ -151,6 +151,7 @@ int main(int argc, char *argv[]) {
 			printf("A[%d][%d] = %f, b[%d] = %f from node %s, rank %d, k = %d\n", s, k, A[s][k], number, b[number], processor_name, myrank, k);
 				b[number] = b[number] - A[s][k] * b[k];
 				A[s][k] = 0.0;
+			printf("b[%d] = %f from node %s, rank %d, k = %d\n", number, b[number], processor_name, myrank, k);
 			}
 		
 	}

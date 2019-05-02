@@ -159,6 +159,7 @@ int main(int argc, char *argv[]) {
 				b[s] = b[s] - A[s][k] * b[k];
 				A[s][k] = 0.0;
 			}
+		printf("b[0] = %f from node %s, rank %d\n",b[0], processor_name, myrank);
 	}
 
 	//	printf("Completed row operations %d\n", k);

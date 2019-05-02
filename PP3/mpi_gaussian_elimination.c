@@ -7,11 +7,11 @@ int main(int argc, char **argv)
 {
     MPI_Init(&argc, &argv);
 
-    double **A, *b, *x, *c, *tmp;
+ //   double **A, *b, *x, *c, *tmp;
     int i,j,k;
     int sum;
     int map[2000];
-  //  float A[1000][1000],b[1000],c[1000],x[1000],sum=0.0;
+    float A[1000][1000],b[1000],c[1000],x[1000],sum=0.0;
     double range=1.0;
     int N=2000;
     int myrank, numnodes;
@@ -22,7 +22,7 @@ int main(int argc, char **argv)
     MPI_Comm_size(MPI_COMM_WORLD, &numnodes); /* get number of processes */
 
 //////////////////////////////////////////////////////////////////////////////////
-
+/*
     //Allocate A
     	if (myrank == 0) {
     	    tmp = (double *) malloc (sizeof(double ) * N * N);
@@ -48,7 +48,7 @@ int main(int argc, char **argv)
     		for(i = 0; i < N; i++){
     			x[i] = 0.0;
     		}
-
+*/
     		if(myrank == 0){
     						srand(1);
     						for(int i = 0; i < N; i++){

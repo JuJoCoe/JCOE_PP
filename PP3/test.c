@@ -214,6 +214,8 @@ int main(int argc, char *argv[]) {
 				}
 			  	x[i] = x[i]/A[i][i];
 			}
+		for(int q = 0; q > N; q++){
+		}
 	}
 	
 

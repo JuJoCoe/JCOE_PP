@@ -122,7 +122,7 @@ int main(int argc, char *argv[]) {
 	    		number = 1;
 	    		int size = N * (IterationsPerThread + leftover);
 	    		int bsize = size/3;
-			printf("sending size = %d\n", size);
+		//	printf("sending size = %d\n", size);
 	    		MPI_Send(&number, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
 	    		MPI_Send(&size, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
 	    		MPI_Send(A[indexrow], size, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
@@ -143,7 +143,7 @@ int main(int argc, char *argv[]) {
 		else {  // receive my part of A
 		MPI_Recv(&number, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 		MPI_Recv(&size, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-		printf("number and size = %d and %d from node %s, rank %d\n", number, size, processor_name, myrank);
+	//	printf("number and size = %d and %d from node %s, rank %d\n", number, size, processor_name, myrank);
 		int bsize = size/3;
 		if(bsize == 0){ 
 			bsize = 1;

@@ -150,9 +150,10 @@ int main(int argc, char *argv[]) {
 			for(int l = k+1; l<N; l++){
 				A[s][l] = A[s][l] - z*A[k][l];
 			}
-				b[0] = b[indexrow] - A[s][k] * b[k];
+				b[indexrow] = b[indexrow] - A[s][k] * b[k];
 				A[s][k] = 0.0;
 			}
+		MPI_Bcast(&b[0], N, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 	}
 	
 

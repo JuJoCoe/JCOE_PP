@@ -70,9 +70,9 @@ int main(int argc, char *argv[]) {
 		A[2][1] = 1;
 		A[2][2] = 2;
 		
-	//	b[0] = 8;
-	//	b[1] = -11;
-	//	b[2] = -3;
+		b[0] = 8;
+		b[1] = -11;
+		b[2] = -3;
 
 		
 	}
@@ -122,7 +122,7 @@ int main(int argc, char *argv[]) {
 	    		MPI_Send(&number, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
 	    		MPI_Send(&size, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
 	    		MPI_Send(A[indexrow], size, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
-	    		MPI_Send(&b[count], bsize, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
+	    	//	MPI_Send(&b[count], bsize, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
 	    		indexrow = indexrow + IterationsPerThread + leftover;
 	    		count = count+bsize;
 	    	}else{
@@ -145,7 +145,7 @@ int main(int argc, char *argv[]) {
 			bsize = 1;
 		}
 	    MPI_Recv(A[0], size, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-	    MPI_Recv(&b[0], bsize, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+	//    MPI_Recv(&b[0], bsize, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 	//		printf("Recieved first time %d\n", k);
 		  }
 

@@ -48,6 +48,24 @@ int main(int argc, char **argv)
     		for(i = 0; i < N; i++){
     			x[i] = 0.0;
     		}
+
+    		if(myrank == 0){
+    						srand(1);
+    						for(int i = 0; i < N; i++){
+    							for(int j = 0; j < N; j++){
+    							 	A[i][j] = (rand() % 11) - 5;
+    							 	if(A[i][j] == 0){
+    							 		A[i][j] = 1;
+    							 			}
+    							 		 }
+    							 		 b[i] = rand() % (10 + 1 - 0) + 0;
+    							 		 if(b[i] == 0){
+    							 			 b[i] = 1;
+    							 		 }
+    							 	 	 }
+
+    						MPI_Bcast(&b[0], N, MPI_INT, 0, MPI_COMM_WORLD);
+    					}
 //////////////////////////////////////////////////////////////////////////////////
 
     begin1 =clock();

@@ -135,7 +135,7 @@ int main(int argc, char *argv[]) {
 	    		MPI_Send(&number, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
 	    		MPI_Send(&size, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
 	    		MPI_Send(A[0], 1, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
-	    		MPI_Send(&b[count], 1, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
+	    		MPI_Send(&b[0], 1, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
 	    	}
 		    printf("Sent first time %d\n", k);
 	    	}

@@ -213,7 +213,7 @@ int main(int argc, char *argv[]) {
 				 }
 					x[i] = x[i]/A[i][i];
 			}
-		printf("x%d = %f\n", 0, x[0]);
+		printf("x%d = %f\n", 0, x[1]);
 		
 	}
 	

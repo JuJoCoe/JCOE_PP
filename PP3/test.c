@@ -115,7 +115,7 @@ int main(int argc, char *argv[]) {
 	    	}
 
 	    	if(indexrow < IterationsPerThread +leftover+indexrow){
-	    		number = 1;
+	    		number = indexrow;
 	    		int size = N * (IterationsPerThread + leftover);
 		//	printf("sending size = %d\n", size);
 	    		MPI_Send(&number, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
@@ -141,14 +141,13 @@ int main(int argc, char *argv[]) {
 		  }
 
 	MPI_Barrier(MPI_COMM_WORLD);
-	if(number == 1){
+	if(number != 0){
 		for(int s = 0; s<(size/N); s++){
 			float z = A[s][k];
 			for(int l = k+1; l<N; l++){
 				A[s][l] = A[s][l] - z*A[k][l];
 			}
-				b[s] = b[s] - A[s][k] * b[k];
-				printf("%f = %f - %f * %f\n", b[s], b[s], A[s][k] * b[k]);
+				b[indexrow] = b[indexrow] - A[s][k] * b[k];
 				A[s][k] = 0.0;
 			}
 	}
@@ -184,7 +183,7 @@ int main(int argc, char *argv[]) {
 	//			    printf("Recieved Second time %d\n", k);
 			    }
 	}else{
-		if(number == 1){
+		if(number != 0){
 		MPI_Send(A[0], size, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD);
 	//		printf("Sent Second time %d\n", k);
 		}

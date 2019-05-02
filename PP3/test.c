@@ -210,7 +210,7 @@ int main(int argc, char *argv[]) {
 			x[i] = b[i];
 				for(int j=N-1; j > i; j--){
 					x[i] = x[i] - A[i][j] * x[j];
-					printf("test"\n);
+					printf("test\n");
 				 }
 					x[i] = x[i]/A[i][i];
 			}

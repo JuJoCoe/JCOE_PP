@@ -90,7 +90,8 @@ int main(int argc, char *argv[]) {
 			}
 			A[k][k] = 1.0;
 		}
-	//	b[k] = b[k]/y;
+		
+		b[k] = b[k]/y;
 
 
 

@@ -148,7 +148,7 @@ int main(int argc, char *argv[]) {
 			for(int l = k+1; l<N; l++){
 				A[s][l] = A[s][l] - z*A[k][l];
 			}
-		//		b[number] = b[number] - A[s][k] * b[k];
+				b[number] = b[number] - A[s][k] * b[k];
 				A[s][k] = 0.0;
 			}
 		

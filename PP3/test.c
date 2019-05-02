@@ -117,8 +117,8 @@ int main(int argc, char *argv[]) {
 	    		number = indexrow;
 	    		int size = N * (IterationsPerThread + leftover);
 	    		MPI_Send(&number, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
-	    		MPI_Send(&size, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
-	    		MPI_Send(A[indexrow], size, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
+	    		MPI_Send(&size, 1, MPI_INT, i, TAG+1, MPI_COMM_WORLD);
+	    		MPI_Send(A[indexrow], size, MPI_DOUBLE, i, TAG+2, MPI_COMM_WORLD);
 	    		indexrow = indexrow + IterationsPerThread + leftover;
 	    	}else{
 	    		number = 0;

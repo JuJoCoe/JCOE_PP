@@ -214,11 +214,13 @@ int main(int argc, char *argv[]) {
 				}
 			  	x[i] = x[i]/A[i][i];
 			}
-		int q = 0;
-		while(q > 2){
-		q++;	
-		printf("%f\n", x[0]);
-		}
+		printf("before test loop");
+		int q = 2;
+		while(q > 1) {
+    		printf("test loop");
+    		q = 0;
+			}
+		printf("after test loop");
 	}
 	
 

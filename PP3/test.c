@@ -142,7 +142,7 @@ int main(int argc, char *argv[]) {
 		  }
 
 	MPI_Barrier(MPI_COMM_WORLD);
-		/*
+		
 	if(number != 0){
 		for(int s = 0; s<(size/N); s++){
 			printf("b[0] = %f\n", b[0]);
@@ -154,7 +154,7 @@ int main(int argc, char *argv[]) {
 				A[s][k] = 0.0;
 			}
 	}
-	*/
+	
 
 	//	printf("Completed row operations %d\n", k);
 	MPI_Barrier(MPI_COMM_WORLD);

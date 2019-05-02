@@ -150,7 +150,7 @@ int main(int argc, char *argv[]) {
 			for(int l = k+1; l<N; l++){
 				A[s][l] = A[s][l] - z*A[k][l];
 			}
-				b[indexrow] = b[0] - A[s][k] * b[k];
+				b[0] = b[indexrow] - A[s][k] * b[k];
 				A[s][k] = 0.0;
 			}
 	}

@@ -9,7 +9,7 @@ int main(int argc, char **argv)
 
     int i,j,k;
     int map[2000];
-    float A[2000][2000],b[52000],c[2000],x[2000],sum=0.0;
+    float A[2000][2000],b[2000],c[2000],x[2000],sum=0.0;
     double range=1.0;
     int n=3;
     int rank, nprocs;

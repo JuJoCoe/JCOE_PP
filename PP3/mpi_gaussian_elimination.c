@@ -6,11 +6,15 @@
 
 int main(int argc, char *argv[]) {
 	double **A, *b, *x, *tmp;
+	int map[3];
+	int C[3];
 	int N = 2000;
 	double startTime, endTime;
 	int myrank, numnodes, stripSize, offset, numElements;
 	int i, j, k;
 	int number = 0;
+	double y;
+	int indexrow;
 
 	MPI_Init(&argc, &argv);
 
@@ -68,93 +72,76 @@ int main(int argc, char *argv[]) {
 		b[2] = -3;
 	}
 
-	b[0] = 8;
-	b[1] = -11;
-	b[2] = -3;
-
-
-	//numnodes = number of processes
-	stripSize = N/numnodes;
-
-
-	for(k = 0; k < N ; k++){
-
-	if (myrank == 0) {
-//		float y = A[k][k];
-//		for(int j = k+1; j < N; j++){
-//			A[k][j] = A[k][j]/y;
-//		}
-
-//		b[k] = b[k]/y;
-//		A[k][k] = 1.0;
-
-		int TotalIterations = N - (k);
-		int IterationsPerProcess = TotalIterations/numnodes;
-		int Remainder = TotalIterations%numnodes;
-		int indexrow = k+1;
-
-
-	    offset = stripSize;
-	    numElements = stripSize * N;
-	    for (i=1; i<numnodes; i++) {
-		number = 0;
-	    	int leftover = 0;
-	    	if(Remainder != 0){
-	    		Remainder--;
-	    		leftover++;
-	 		}
-	    	if(indexrow < IterationsPerProcess +leftover+indexrow){
-	    		number = 1;
-	    		MPI_Send(&number, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
-	    		MPI_Send(A[indexrow], IterationsPerProcess +leftover+indexrow, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
-	    		indexrow = indexrow + IterationsPerProcess + leftover;
-	    }else{
-	    	number = 0;
-	    	MPI_Send(&number, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
-	    }
-	    }
-
-	    MPI_Barrier(MPI_COMM_WORLD);
-	  }
-	  else {  // receive my part of
-		MPI_Recv(&number, 1, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-	    if(number == 1){
-	    MPI_Recv(A[0], stripSize * N, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-		}
-	    printf("number = %d from node %s, rank %d\n", number, processor_name, myrank);
-	    MPI_Barrier(MPI_COMM_WORLD);
-
-	  }
-//	float y = A[k][k];
-//	b[k] = b[k]/y;
-
-//myrank 0 sends a flag to see if the process will need to run this line of code
-
-	 MPI_Barrier(MPI_COMM_WORLD);
-	}	
+		b[0] = 8;
+		b[1] = -11;
+		b[2] = -3;
 
 
 
-/*
-	if(myrank == 0){
-	for(i = 0; i < N; i++){
-		for(j=0; j < N; j++){
-			printf("A[%d][%d] = %f from node %s, rank %d\n", i, j, A[i][j], processor_name, myrank);
-			printf("number = %d from node %s, rank %d\n", number, processor_name, myrank);
-		}
-		printf("b[%d] = %f from node %s, rank %d\n",i, b[i], processor_name, myrank);
-	}
-	}
-	else {
-		for(i = 0; i < 1; i++){
-			for(j=0; j < N; j++){
-				printf("A[%d][%d] = %f from node %s, rank %d\n", i, j, A[i][j], processor_name, myrank);
-				printf("number = %d from node %s, rank %d\n", number, processor_name, myrank);
-			}
-			printf("b[%d] = %f from node %s, rank %d\n",i, b[i], processor_name, myrank);
-		}
-	}
-*/
+	//	 begin1 =clock();
+
+		    MPI_Bcast (A[0],9,MPI_DOUBLE,0,MPI_COMM_WORLD);
+		    MPI_Bcast (b,N,MPI_DOUBLE,0,MPI_COMM_WORLD);
+
+		    for(i=0; i<N; i++)
+		    {
+		        map[i]= i % numnodes;
+		    }
+
+		    for(k=0;k<N;k++)
+		    {
+		        MPI_Bcast (&A[k][k],N-k,MPI_DOUBLE,map[k],MPI_COMM_WORLD);
+		        MPI_Bcast (&b[k],1,MPI_DOUBLE,map[k],MPI_COMM_WORLD);
+		        for(i= k+1; i<N; i++)
+		        {
+		            if(map[i] == myrank)
+		            {
+		                C[i]=A[i][k]/A[k][k];
+		            }
+		        }
+		        for(i= k+1; i<N; i++)
+		        {
+		            if(map[i] == myrank)
+		            {
+		                for(j=0;j<N;j++)
+		                {
+		                    A[i][j]=A[i][j]-( C[i]*A[k][j] );
+		                }
+		                b[i]=b[i]-( C[i]*b[k] );
+		            }
+		        }
+		    }
+		 //   end1 = clock();
+
+		//////////////////////////////////////////////////////////////////////////////////
+
+	//	    begin2 =clock();
+
+		    if (myrank==0)
+		    {
+		    x[N-1]=b[N-1]/A[N-1][N-1];
+		    for(i=N-2;i>=0;i--)
+		    {
+		        double sum=0.0;
+
+		        for(j=i+1;j<N;j++)
+		        {
+		            sum=sum+A[i][j]*x[j];
+		        }
+		        x[i]=(b[i]-sum)/A[i][i];
+		    }
+
+	//	    end2 = clock();
+		    }
+		//////////////////////////////////////////////////////////////////////////////////
+		    if (myrank==0){
+		        printf("\nThe solution is:");
+		        for(i=0;i<N;i++)
+		        {
+		            printf("\nx%d=%f\t",i,x[i]);
+
+		        }
+		    }
 
 
 
@@ -162,25 +149,7 @@ int main(int argc, char *argv[]) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	MPI_Finalize();
+    MPI_Finalize();
 	return 0;
 
 

@@ -151,6 +151,21 @@ int main(int argc, char *argv[]) {
 			}
 
 	}
+		
+	if(numnodes == 1){
+		for(int s = 0; s<(N-(k+1)); s++){
+		//	printf("k = %d\n" , k);
+			float z = A[s][k];
+			for(int l = k+1; l<N; l++){
+				A[s][l] = A[s][l] - z*A[k][l];
+			}
+
+				b[number] = b[number] - A[s][k] * b[k];
+				A[s][k] = 0.0;
+
+			}
+	}
+		
 
 
 	//	printf("Completed row operations %d\n", k);

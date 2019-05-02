@@ -37,9 +37,9 @@ int main(int argc, char *argv[]) {
 	      A[i] = &tmp[i * N];
 	  }
 	  else {
-	    tmp = (double *) malloc (sizeof(double ) * N * N /numnodes);
-	    A = (double **) malloc (sizeof(double *) * N / numnodes);
-	    for (i = 0; i < N/numnodes; i++)
+	    tmp = (double *) malloc (sizeof(double ) * N * N /numnodes + 1);
+	    A = (double **) malloc (sizeof(double *) * N / numnodes + 1);
+	    for (i = 0; i < N/numnodes + 1; i++)
 	      A[i] = &tmp[i * N];
 	  }
 

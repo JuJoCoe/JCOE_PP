@@ -200,6 +200,17 @@ int main(int argc, char *argv[]) {
 
 	 MPI_Barrier(MPI_COMM_WORLD);
 	}
+	
+	if(myrank == 0){
+		for(int i=N-1; i >= 0; i--){
+			x[i] = b[i];
+				for(int j=N-1; j > i; j--){
+					x[i] = x[i] - A[i][j] * x[j];
+				 }
+					x[i] = x[i]/A[i][i];
+			}
+
+	}
 
 
 

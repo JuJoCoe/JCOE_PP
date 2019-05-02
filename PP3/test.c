@@ -187,7 +187,7 @@ int main(int argc, char *argv[]) {
 	}else{
 		if(number != 0){
 		MPI_Send(A[0], size, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD);
-	//	int bsize = size/3;
+		int bsize = size/3;
 	//	MPI_Send(&b[0], bsize, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD);
 	//		printf("Sent Second time %d\n", k);
 		}

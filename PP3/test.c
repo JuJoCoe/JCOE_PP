@@ -216,6 +216,7 @@ int main(int argc, char *argv[]) {
 			}
 		for(int q = 0; q > N; q++){
 		}
+		MPI_Barrier(MPI_COMM_WORLD);
 	}
 	
 

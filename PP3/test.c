@@ -133,7 +133,7 @@ int main(int argc, char *argv[]) {
 		MPI_Recv(&number, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 		MPI_Recv(&size, 1, MPI_INT, 0, TAG+1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 	        MPI_Recv(A[0], size, MPI_DOUBLE, 0, TAG+2, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-		printf("b[%d] = %f from node %s, rank %d\n", 0, b[0], processor_name, myrank);
+		printf("b[%d] = %f and x[%d] = %f from node %s, rank %d\n", 0, b[0], 0, x[0], processor_name, myrank);
 		  }
 
 	MPI_Barrier(MPI_COMM_WORLD);

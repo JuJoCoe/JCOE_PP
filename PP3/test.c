@@ -76,13 +76,9 @@ int main(int argc, char *argv[]) {
 
 		
 	}
-	b[0] = 8;
+		b[0] = 8;
 		b[1] = -11;
 		b[2] = -3;
-
-
-	//numnodes = number of processes
-	stripSize = N/numnodes;
 
 
 	for(k = 0; k < N ; k++){

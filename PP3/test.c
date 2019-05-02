@@ -148,7 +148,7 @@ int main(int argc, char *argv[]) {
 			for(int l = k+1; l<N; l++){
 				A[s][l] = A[s][l] - z*A[k][l];
 			}
-			printf("A[%d][%d] = %f, b[%d] = %f from node %s, rank %d\n, k = %d", s, k, A[s][k], number, b[number], processor_name, myrank, k);
+			printf("A[%d][%d] = %f, b[%d] = %f from node %s, rank %d, k = %d\n", s, k, A[s][k], number, b[number], processor_name, myrank, k);
 				b[number] = b[number] - A[s][k] * b[k];
 				A[s][k] = 0.0;
 			}
@@ -194,7 +194,7 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
-		
+	/*	
 	if(myrank == 0){
 		for(i = 0; i < N; i++){
 				for(j=0; j < N; j++){
@@ -202,7 +202,7 @@ int main(int argc, char *argv[]) {
 				}
 		}
 	}
-
+*/
 
 
 

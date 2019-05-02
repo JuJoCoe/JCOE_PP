@@ -134,6 +134,7 @@ int main(int argc, char *argv[]) {
 	    	}
 	    }
 		else {  // receive my part of A
+			printf("b[0] = %f\n", b[0]);
 		MPI_Recv(&number, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 		MPI_Recv(&size, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 	//	printf("number and size = %d and %d from node %s, rank %d\n", number, size, processor_name, myrank);

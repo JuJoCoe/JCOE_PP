@@ -11,7 +11,7 @@ int main(int argc, char **argv)
     int map[1000];
     float A[1000][1000],b[1000],c[1000],x[1000],sum=0.0;
     double range=1.0;
-    int n=3;
+    int n=1000;
     int rank, nprocs;
     clock_t begin1, end1, begin2, end2;
     MPI_Status status;

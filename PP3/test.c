@@ -151,16 +151,15 @@ int main(int argc, char *argv[]) {
 
 	MPI_Barrier(MPI_COMM_WORLD);
 	if(number == 1){
-		printf("b[0] = %f from node %s, rank %d\n",b[0], processor_name, myrank);
 		for(int s = 0; s<(size/N); s++){
 			float z = A[s][k];
 			for(int l = k+1; l<N; l++){
 				A[s][l] = A[s][l] - z*A[k][l];
 			}
 				b[s] = b[s] - A[s][k] * b[k];
+				printf("%f = %f - %f * %f\n", b[s], b[s], A[s][k] * b[k]);
 				A[s][k] = 0.0;
 			}
-		printf("b[0] = %f from node %s, rank %d\n",b[0], processor_name, myrank);
 	}
 
 	//	printf("Completed row operations %d\n", k);

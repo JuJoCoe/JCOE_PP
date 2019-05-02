@@ -189,7 +189,7 @@ int main(int argc, char *argv[]) {
 			    		int size = N * (IterationsPerThread + leftover);
 			    		int bsize = size/3;
 			    		MPI_Recv(A[indexrow], size, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-			    		MPI_Recv(&b[count], bsize, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+			  //  		MPI_Recv(&b[count], bsize, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 			    		indexrow = indexrow + IterationsPerThread + leftover;
 			    		count = count+bsize;
 			    	}
@@ -199,7 +199,7 @@ int main(int argc, char *argv[]) {
 		if(number == 1){
 		MPI_Send(A[0], size, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD);
 		int bsize = size/3;
-		MPI_Send(&b[0], bsize, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD);
+	//	MPI_Send(&b[0], bsize, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD);
 	//		printf("Sent Second time %d\n", k);
 		}
 	}

@@ -23,8 +23,8 @@ int main(int argc, char **argv)
 
    if(rank == 0){
     						srand(1);
-    						for(int i = 0; i < N; i++){
-    							for(int j = 0; j < N; j++){ 	
+    						for(int i = 0; i < n; i++){
+    							for(int j = 0; j < n; j++){ 	
     							 	A[i][j] = (rand() % 11) - 5;
     							 	if(A[i][j] == 0){
     							 		A[i][j] = 1;

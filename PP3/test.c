@@ -216,6 +216,7 @@ int main(int argc, char *argv[]) {
 
 	}
 
+	/*
 	if(myrank == 0){
 	if(N < 10){
 		//Print outputs
@@ -226,7 +227,7 @@ int main(int argc, char *argv[]) {
 		}
 	}
 	}
-
+*/
 
 
 

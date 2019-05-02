@@ -215,7 +215,7 @@ int main(int argc, char *argv[]) {
 			  	x[i] = x[i]/A[i][i];
 			}
 		int q = 2;
-		while(FALSE){
+		while(1 == 1){
 		printf("%f\n", x[0]);
 		}
 	}

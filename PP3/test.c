@@ -176,7 +176,7 @@ int main(int argc, char *argv[]) {
 			    		int size = N * (IterationsPerThread + leftover);
 			    		int bsize = size/3;
 			    		MPI_Recv(A[indexrow], size, MPI_DOUBLE, i, TAG+4, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-			    		MPI_Recv(b[indexrow], bsize, MPI_DOUBLE, i, TAG+5, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+			    		MPI_Recv(&b[indexrow], bsize, MPI_DOUBLE, i, TAG+5, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 			    		indexrow = indexrow + IterationsPerThread + leftover;
 			    	}
 	//			    printf("Recieved Second time %d\n", k);
@@ -185,7 +185,7 @@ int main(int argc, char *argv[]) {
 		if(number != 0){
 		int bsize = size/3;
 		MPI_Send(A[0], size, MPI_DOUBLE, 0, TAG+4, MPI_COMM_WORLD);
-		MPI_Send(b[0], bsize, MPI_DOUBLE, 0, TAG+5, MPI_COMM_WORLD);
+		MPI_Send(&b[0], bsize, MPI_DOUBLE, 0, TAG+5, MPI_COMM_WORLD);
 	//		printf("Sent Second time %d\n", k);
 		}
 	}

@@ -135,7 +135,7 @@ int main(int argc, char *argv[]) {
 
 	if(number != 0 && myrank != 0){
 		for(int s = 0; s<(size/N); s++){
-			printf("k = %d\n" , k);
+		//	printf("k = %d\n" , k);
 			float z = A[s][k];
 			for(int l = k+1; l<N; l++){
 				A[s][l] = A[s][l] - z*A[k][l];

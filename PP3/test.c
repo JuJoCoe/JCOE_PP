@@ -216,7 +216,9 @@ int main(int argc, char *argv[]) {
 		printf("x%d = %f\n", 0, x[0]);
 		printf("x%d = %f\n", 1, x[1]);
 		printf("x%d = %f\n", 2, x[2]);
-		
+		for(int i = 0; i < 3; i++){
+			printf("x = %f\n", x[i]);
+		}
 	}
 	
 

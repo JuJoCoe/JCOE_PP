@@ -58,31 +58,26 @@ int main(int argc, char *argv[]) {
 
 	//Populate Matrix
 	if(myrank == 0){
-		A[0][0] = 2;
-		A[0][1] = 1;
-		A[0][2] = -1;
+		srand(1);
+		for(int i = 0; i < N; i++){
+			for(int j = 0; j < N; j++){
+			 	A[i][j] = (rand() % 11) - 5;
+			 	if(A[i][j] == 0){
+			 		A[i][j] = 1;
+			 			}
+			 		 }
+			 		 b[i] = rand() % (10 + 1 - 0) + 0;
+			 		 if(b[i] == 0){
+			 			 b[i] = 1;
+			 		 }
+			 	 	 }
 
-		A[1][0] = -3;
-		A[1][1] = -1;
-		A[1][2] = 2;
-
-		A[2][0] = -2;
-		A[2][1] = 1;
-		A[2][2] = 2;
-		
-		b[0] = 8;
-		b[1] = -11;
-		b[2] = -3;
-		
-		
-	}else{
-		b[0] = 8;
-		b[1] = -11;
-		b[2] = -3;
+		MPI_Bcast(&b[0], N, MPI_INT, 0, MPI_COMM_WORLD);
 	}
-	
+
+
 	for(k = 0; k < N ; k++){
-	//	printf("b[%d] = %f from node %s, rank %d\n", 0, b[0], processor_name, myrank);
+
 		if (myrank == 0){
 			y = A[k][k];
 			for(int j = k+1; j < N; j++){
@@ -92,8 +87,7 @@ int main(int argc, char *argv[]) {
 			b[k] = b[k]/y;
 			MPI_Bcast(&b[0], N, MPI_INT, 0, MPI_COMM_WORLD);
 		}
-		
-		//b[k] = b[k]/y;
+
 
 
 
@@ -136,11 +130,11 @@ int main(int argc, char *argv[]) {
 		MPI_Recv(&number, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 		MPI_Recv(&size, 1, MPI_INT, 0, TAG+1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 	        MPI_Recv(A[0], size, MPI_DOUBLE, 0, TAG+2, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-	//	printf("b[%d] = %f and x[%d] = %f from node %s, rank %d\n", 0, b[0], 0, x[0], processor_name, myrank);
+
 		  }
 
 	MPI_Barrier(MPI_COMM_WORLD);
-		
+
 	if(number != 0){
 		for(int s = 0; s<(size/N); s++){
 		//	printf("b[0] = %f\n", b[0]);
@@ -148,14 +142,14 @@ int main(int argc, char *argv[]) {
 			for(int l = k+1; l<N; l++){
 				A[s][l] = A[s][l] - z*A[k][l];
 			}
-			printf("%f = %f - %f * %f %s %d %d\n", b[number], b[number], A[s][k], b[number], processor_name, myrank, k);
+
 				b[number] = b[number] - A[s][k] * b[k];
 				A[s][k] = 0.0;
-			printf("b[%d] = %f from node %s, rank %d, k = %d\n", number, b[number], processor_name, myrank, k);
+
 			}
-		
+
 	}
-	
+
 
 	//	printf("Completed row operations %d\n", k);
 	MPI_Barrier(MPI_COMM_WORLD);
@@ -168,7 +162,7 @@ int main(int argc, char *argv[]) {
 				int Remainder = TotalIterations%numnodes;
 							//Which indexrow to start at
 				indexrow = k+1;
-		
+
 			for (i=1; i<numnodes; i++) {
 				leftover = 0;
 
@@ -184,26 +178,15 @@ int main(int argc, char *argv[]) {
 			    		MPI_Recv(&b[indexrow], bsize, MPI_DOUBLE, i, TAG+5, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 			    		indexrow = indexrow + IterationsPerThread + leftover;
 			    	}
-	//			    printf("Recieved Second time %d\n", k);
 			    }
 	}else{
 		if(number != 0){
 		int bsize = size/3;
 		MPI_Send(A[0], size, MPI_DOUBLE, 0, TAG+4, MPI_COMM_WORLD);
 		MPI_Send(&b[0], bsize, MPI_DOUBLE, 0, TAG+5, MPI_COMM_WORLD);
-	//		printf("Sent Second time %d\n", k);
 		}
 	}
 
-	/*	
-	if(myrank == 0){
-		for(i = 0; i < N; i++){
-				for(j=0; j < N; j++){
-					printf("A[%d][%d] = %f, b[%d] = %f from node %s, rank %d\n", i, j, A[i][j], j, b[j], processor_name, myrank);
-				}
-		}
-	}
-*/
 
 
 

@@ -145,7 +145,7 @@ int main(int argc, char *argv[]) {
 		
 	if(number != 0){
 		for(int s = 0; s<(size/N); s++){
-			printf("b[0] = %f\n", b[0]);
+//			printf("b[0] = %f\n", b[0]);
 			float z = A[s][k];
 			for(int l = k+1; l<N; l++){
 				A[s][l] = A[s][l] - z*A[k][l];
@@ -190,7 +190,7 @@ int main(int argc, char *argv[]) {
 	//			    printf("Recieved Second time %d\n", k);
 			    }
 	}else{
-		if(number == 1){
+		if(number != 1){
 		MPI_Send(A[0], size, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD);
 		int bsize = size/3;
 		MPI_Send(&b[0], bsize, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD);

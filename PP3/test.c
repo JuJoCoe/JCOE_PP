@@ -134,9 +134,8 @@ int main(int argc, char *argv[]) {
 		else {  // receive my part of A
 		MPI_Recv(&number, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 		MPI_Recv(&size, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-	//	printf("number and size = %d and %d from node %s, rank %d\n", number, size, processor_name, myrank);
-	    MPI_Recv(A[0], size, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-	//		printf("Recieved first time %d\n", k);
+	        MPI_Recv(A[0], size, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+		printf("b[%d] = %f from node %s, rank %d\n", 0, b[0], processor_name, myrank);
 		  }
 
 	MPI_Barrier(MPI_COMM_WORLD);

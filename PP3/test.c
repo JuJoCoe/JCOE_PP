@@ -124,15 +124,15 @@ int main(int argc, char *argv[]) {
 	    		number = 0;
 	    		int size = 1;
 	    		MPI_Send(&number, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
-	    		MPI_Send(&size, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
-	    		MPI_Send(A[0], 1, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
+	    		MPI_Send(&size, 1, MPI_INT, i, TAG+1, MPI_COMM_WORLD);
+	    		MPI_Send(A[0], 1, MPI_DOUBLE, i, TAG+2, MPI_COMM_WORLD);
 	    	}
 	    	}
 	    }
 		else {  // receive my part of A
 		MPI_Recv(&number, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-		MPI_Recv(&size, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-	        MPI_Recv(A[0], size, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+		MPI_Recv(&size, 1, MPI_INT, 0, TAG+2, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+	        MPI_Recv(A[0], size, MPI_DOUBLE, 0, TAG+3, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 		printf("b[%d] = %f from node %s, rank %d\n", 0, b[0], processor_name, myrank);
 		  }
 
@@ -175,8 +175,8 @@ int main(int argc, char *argv[]) {
 			    	if(indexrow < IterationsPerThread +leftover+indexrow){
 			    		int size = N * (IterationsPerThread + leftover);
 			    		int bsize = size/3;
-			    		MPI_Recv(A[indexrow], size, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-			    		MPI_Recv(b[indexrow], bsize, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+			    		MPI_Recv(A[indexrow], size, MPI_DOUBLE, i, TAG+4, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+			    		MPI_Recv(b[indexrow], bsize, MPI_DOUBLE, i, TAG+5, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 			    		indexrow = indexrow + IterationsPerThread + leftover;
 			    	}
 	//			    printf("Recieved Second time %d\n", k);
@@ -184,8 +184,8 @@ int main(int argc, char *argv[]) {
 	}else{
 		if(number != 0){
 		int bsize = size/3;
-		MPI_Send(A[0], size, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD);
-		MPI_Send(b[0], bsize, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD);
+		MPI_Send(A[0], size, MPI_DOUBLE, 0, TAG+4, MPI_COMM_WORLD);
+		MPI_Send(b[0], bsize, MPI_DOUBLE, 0, TAG+5, MPI_COMM_WORLD);
 	//		printf("Sent Second time %d\n", k);
 		}
 	}

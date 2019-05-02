@@ -133,11 +133,8 @@ int main(int argc, char *argv[]) {
 
 		  }
 
-	MPI_Barrier(MPI_COMM_WORLD);
-
 	if(number != 0){
 		for(int s = 0; s<(size/N); s++){
-		//	printf("b[0] = %f\n", b[0]);
 			float z = A[s][k];
 			for(int l = k+1; l<N; l++){
 				A[s][l] = A[s][l] - z*A[k][l];
@@ -152,7 +149,6 @@ int main(int argc, char *argv[]) {
 
 
 	//	printf("Completed row operations %d\n", k);
-	MPI_Barrier(MPI_COMM_WORLD);
 	if(myrank == 0){
 		//Calculates total number of times the inner loop will run
 				int TotalIterations = N - (k+1);

@@ -190,7 +190,7 @@ int main(int argc, char *argv[]) {
 	//			    printf("Recieved Second time %d\n", k);
 			    }
 	}else{
-		if(number != 1){
+		if(number != 0){
 		MPI_Send(A[0], size, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD);
 		int bsize = size/3;
 		MPI_Send(&b[0], bsize, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD);

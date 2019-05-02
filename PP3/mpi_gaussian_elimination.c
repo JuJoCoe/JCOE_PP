@@ -13,7 +13,7 @@ int main(int argc, char **argv)
     int map[2000];
     float A[1000][1000],b[1000],c[1000],x[1000],sum=0.0;
     double range=1.0;
-    int N=2000;
+    int N=1000;
     int myrank, numnodes;
     clock_t begin1, end1, begin2, end2;
     MPI_Status status;

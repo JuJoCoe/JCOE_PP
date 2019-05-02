@@ -177,7 +177,7 @@ int main(int argc, char *argv[]) {
 				int Remainder = TotalIterations%numnodes;
 							//Which indexrow to start at
 				indexrow = k+1;
-			//	count = indexrow;
+				count = indexrow;
 
 
 			    for (i=1; i<numnodes; i++) {

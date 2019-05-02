@@ -134,7 +134,6 @@ int main(int argc, char *argv[]) {
 	    	}
 	    }
 		else {  // receive my part of A
-			printf("b[0] = %f\n", b[0]);
 		MPI_Recv(&number, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 		MPI_Recv(&size, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 	//	printf("number and size = %d and %d from node %s, rank %d\n", number, size, processor_name, myrank);
@@ -143,6 +142,7 @@ int main(int argc, char *argv[]) {
 		  }
 
 	MPI_Barrier(MPI_COMM_WORLD);
+		/*
 	if(number != 0){
 		for(int s = 0; s<(size/N); s++){
 			printf("b[0] = %f\n", b[0]);
@@ -154,6 +154,7 @@ int main(int argc, char *argv[]) {
 				A[s][k] = 0.0;
 			}
 	}
+	*/
 
 	//	printf("Completed row operations %d\n", k);
 	MPI_Barrier(MPI_COMM_WORLD);

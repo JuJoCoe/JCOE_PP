@@ -8,8 +8,8 @@ int main(int argc, char **argv)
     MPI_Init(&argc, &argv);
 
     int i,j,k;
-    int map[2000];
-    float A[2000][2000],b[2000],c[2000],x[2000],sum=0.0;
+    int map[1000];
+    float A[1000][1000],b[1000],c[1000],x[1000],sum=0.0;
     double range=1.0;
     int n=3;
     int rank, nprocs;

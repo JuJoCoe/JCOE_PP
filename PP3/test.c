@@ -211,8 +211,6 @@ int main(int argc, char *argv[]) {
 			x[i] = b[i];
 			for(int j=N-1; j > i; j--){
 				x[i] = x[i] - A[i][j] * x[j];
-				for(int q = 0; q > 0; q--){
-				}
 				}
 			  	x[i] = x[i]/A[i][i];
 			}

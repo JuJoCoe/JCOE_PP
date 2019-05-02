@@ -9,7 +9,7 @@ int main(int argc, char **argv)
 
  //   double **A, *b, *x, *c, *tmp;
     int i,j,k;
-    int sum;
+ //   int sum;
     int map[2000];
     float A[1000][1000],b[1000],c[1000],x[1000],sum=0.0;
     double range=1.0;

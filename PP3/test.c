@@ -74,7 +74,6 @@ int main(int argc, char *argv[]) {
 		b[1] = -11;
 		b[2] = -3;
 		
-	//	MPI_Bcast(&b[0], N, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 		
 	}else{
 		b[0] = 8;
@@ -105,7 +104,6 @@ int main(int argc, char *argv[]) {
 		int Remainder = TotalIterations%numnodes;
 					//Which indexrow to start at
 		indexrow = k+1;
-	//	count = indexrow;
 
 	    for (i=1; i<numnodes; i++) {
 		leftover = 0;
@@ -150,7 +148,7 @@ int main(int argc, char *argv[]) {
 			for(int l = k+1; l<N; l++){
 				A[s][l] = A[s][l] - z*A[k][l];
 			}
-				b[indexrow] = b[indexrow] - A[s][k] * b[k];
+				b[number] = b[number] - A[s][k] * b[k];
 				A[s][k] = 0.0;
 			}
 		

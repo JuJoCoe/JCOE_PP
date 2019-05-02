@@ -113,7 +113,7 @@ int main(int argc, char **argv)
         printf("\nBack substitution time: %f\n", (double)(end2 - begin2) / CLOCKS_PER_SEC);
     }
 
-    return(0);
 
     MPI_Finalize();
+    return(0);
 }

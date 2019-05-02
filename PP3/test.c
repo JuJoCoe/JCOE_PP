@@ -214,7 +214,8 @@ int main(int argc, char *argv[]) {
 				}
 			  	x[i] = x[i]/A[i][i];
 			}
-		if(2 > 1){
+		int q = 2;
+		if(q > 1){
 		printf("%f\n", x[0]);
 		}
 	}

@@ -212,8 +212,9 @@ int main(int argc, char *argv[]) {
 				x[i] = x[i] - A[i][j] * x[j];
 				}
 				x[i] = x[i]/A[i][i];
-				printf("j%d = %f\n", j, x[j]);
 			}
+		for(int k = N-1; k >=0; k--){
+		}
 	}
 	
 

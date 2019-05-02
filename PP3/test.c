@@ -213,15 +213,6 @@ int main(int argc, char *argv[]) {
 				 }
 					x[i] = x[i]/A[i][i];
 			}
-
-		//Print outputs
-		printf("\n");
-		printf("X Outputs:\n");
-		for(int l = 0; l <= N-1; l++){
-			 printf("x%d = %f\n", l, x[l]);
-		}
-	
-	
 	}
 
 	

@@ -133,7 +133,7 @@ int main(int argc, char *argv[]) {
 
 		  }
 
-	if(number != 0){
+	if(number != 0 && myrank != 0){
 		for(int s = 0; s<(size/N); s++){
 			printf("k = %d\n" , k);
 			float z = A[s][k];

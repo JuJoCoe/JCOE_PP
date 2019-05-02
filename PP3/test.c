@@ -90,7 +90,7 @@ int main(int argc, char *argv[]) {
 			}
 			A[k][k] = 1.0;
 		}
-		b[k] = b[k]/y;
+	//	b[k] = b[k]/y;
 
 
 
@@ -145,7 +145,7 @@ int main(int argc, char *argv[]) {
 			for(int l = k+1; l<N; l++){
 				A[s][l] = A[s][l] - z*A[k][l];
 			}
-				b[number] = b[number] - A[s][k] * b[k];
+		//		b[number] = b[number] - A[s][k] * b[k];
 				A[s][k] = 0.0;
 			}
 		

@@ -82,7 +82,7 @@ int main(int argc, char *argv[]) {
 	}
 	
 	for(k = 0; k < N ; k++){
-		printf("b[%d] = %f from node %s, rank %d\n", 0, b[0], processor_name, myrank);
+	//	printf("b[%d] = %f from node %s, rank %d\n", 0, b[0], processor_name, myrank);
 		if (myrank == 0){
 			y = A[k][k];
 			for(int j = k+1; j < N; j++){

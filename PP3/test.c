@@ -137,7 +137,7 @@ int main(int argc, char *argv[]) {
 	    		MPI_Send(A[0], 1, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
 	    		MPI_Send(&b[0], 1, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
 	    	}
-		    printf("Sent first time %d\n", k);
+	//	    printf("Sent first time %d\n", k);
 	    	}
 	    }
 		else {  // receive my part of A
@@ -145,10 +145,12 @@ int main(int argc, char *argv[]) {
 		MPI_Recv(&size, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 		printf("number and size = %d and %d from node %s, rank %d\n", number, size, processor_name, myrank);
 		int bsize = size/3;
-	//	if(bsize == 0){ bsize = 1;}
+		if(bsize == 0){ 
+			bsize = 1;
+		}
 	    MPI_Recv(A[0], size, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 	    MPI_Recv(&b[0], bsize, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-			printf("Recieved first time %d\n", k);
+	//		printf("Recieved first time %d\n", k);
 		  }
 
 	MPI_Barrier(MPI_COMM_WORLD);
@@ -163,7 +165,7 @@ int main(int argc, char *argv[]) {
 			}
 	}
 
-		printf("Completed row operations %d\n", k);
+	//	printf("Completed row operations %d\n", k);
 	MPI_Barrier(MPI_COMM_WORLD);
 	if(myrank == 0){
 		//Calculates total number of times the inner loop will run
@@ -190,12 +192,12 @@ int main(int argc, char *argv[]) {
 			    		MPI_Recv(A[indexrow], size, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 			    		indexrow = indexrow + IterationsPerThread + leftover;
 			    	}
-				    printf("Recieved Second time %d\n", k);
+	//			    printf("Recieved Second time %d\n", k);
 			    }
 	}else{
 		if(number == 1){
 		MPI_Send(A[0], size, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD);
-			printf("Sent Second time %d\n", k);
+	//		printf("Sent Second time %d\n", k);
 		}
 	}
 

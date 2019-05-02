@@ -208,6 +208,7 @@ int main(int argc, char *argv[]) {
 	if(myrank == 0){
 		for(int i=N-1; i >= 0; i--){
 			x[i] = b[i];
+			printf("i = %d\n");
 				for(int j=N-1; j > i; j--){
 					x[i] = x[i] - A[i][j] * x[j];
 				 }
@@ -216,9 +217,7 @@ int main(int argc, char *argv[]) {
 		printf("x%d = %f\n", 0, x[0]);
 		printf("x%d = %f\n", 1, x[1]);
 		printf("x%d = %f\n", 2, x[2]);
-		for(int i = N; i > 1; i--){
-			printf("i = %d\n", i);
-		}
+		
 	}
 	
 

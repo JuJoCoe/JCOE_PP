@@ -75,7 +75,9 @@ int main(int argc, char *argv[]) {
 		b[1] = -11;
 		b[2] = -3;
 	}
-
+	b[0] = 8;
+		b[1] = -11;
+		b[2] = -3;
 
 
 	//numnodes = number of processes

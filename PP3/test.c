@@ -166,8 +166,7 @@ int main(int argc, char *argv[]) {
 				int Remainder = TotalIterations%numnodes;
 							//Which indexrow to start at
 				indexrow = k+1;
-	//			count = indexrow;
-
+		
 			for (i=1; i<numnodes; i++) {
 				leftover = 0;
 
@@ -177,20 +176,18 @@ int main(int argc, char *argv[]) {
 			    	}
 
 			    	if(indexrow < IterationsPerThread +leftover+indexrow){
-			    		number = 1;
 			    		int size = N * (IterationsPerThread + leftover);
-			    		int bsize = size/3;
+			    //		int bsize = size/3;
 			    		MPI_Recv(A[indexrow], size, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 			  //  		MPI_Recv(&b[indexrow], bsize, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 			    		indexrow = indexrow + IterationsPerThread + leftover;
-	//		    		count = count+bsize;
 			    	}
 	//			    printf("Recieved Second time %d\n", k);
 			    }
 	}else{
 		if(number != 0){
 		MPI_Send(A[0], size, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD);
-		int bsize = size/3;
+	//	int bsize = size/3;
 	//	MPI_Send(&b[0], bsize, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD);
 	//		printf("Sent Second time %d\n", k);
 		}

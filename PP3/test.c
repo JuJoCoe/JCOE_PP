@@ -211,10 +211,12 @@ int main(int argc, char *argv[]) {
 			for(int j=N-1; j > i; j--){
 				x[i] = x[i] - A[i][j] * x[j];
 				}
-				x[i] = x[i]/A[i][i];
+			  	x[i] = x[i]/A[i][i];
 			}
-		//for(int q=2; q >= 0; q--){
-		//}
+		int q = 0;
+		while(q > 2){
+			q++;	
+		}
 	}
 	
 

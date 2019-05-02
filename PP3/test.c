@@ -74,13 +74,13 @@ int main(int argc, char *argv[]) {
 		b[1] = -11;
 		b[2] = -3;
 		
-		MPI_Bcast(&b[0], N, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+	//	MPI_Bcast(&b[0], N, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 		
-	}
+	}else{
 		b[0] = 8;
 		b[1] = -11;
 		b[2] = -3;
-
+	}
 
 	for(k = 0; k < N ; k++){
 

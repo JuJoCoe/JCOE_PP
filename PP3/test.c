@@ -148,7 +148,7 @@ int main(int argc, char *argv[]) {
 			for(int l = k+1; l<N; l++){
 				A[s][l] = A[s][l] - z*A[k][l];
 			}
-			printf("A[%d][%d] = %f, b[%d] = %f from node %s, rank %d, k = %d\n", s, k, A[s][k], number, b[number], processor_name, myrank, k);
+			printf("%f = %f - %f * %f %s %d %d\n", b[number], b[number], A[s][k], b[number], processor_name, myrank, k);
 				b[number] = b[number] - A[s][k] * b[k];
 				A[s][k] = 0.0;
 			printf("b[%d] = %f from node %s, rank %d, k = %d\n", number, b[number], processor_name, myrank, k);

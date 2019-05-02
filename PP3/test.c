@@ -12,7 +12,6 @@ int main(int argc, char *argv[]) {
 	int i, j, k;
 	int number = 0;
 	double y;
-	int q;
 	int leftover;
 	int indexrow;
 	int size;

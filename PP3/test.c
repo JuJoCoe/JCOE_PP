@@ -16,6 +16,7 @@ int main(int argc, char *argv[]) {
 	int leftover;
 	int indexrow;
 	int size;
+	int count = 0;
 
 	MPI_Init(&argc, &argv);
 
@@ -74,7 +75,7 @@ int main(int argc, char *argv[]) {
 	b[0] = 8;
 	b[1] = -11;
 	b[2] = -3;
-	
+
 	x[0] = 0;
 	x[1] = 0;
 	x[2] = 0;
@@ -107,11 +108,11 @@ int main(int argc, char *argv[]) {
 		int Remainder = TotalIterations%numnodes;
 					//Which indexrow to start at
 		indexrow = k+1;
-
+		count = indexrow;
 
 	    for (i=1; i<numnodes; i++) {
 		leftover = 0;
-		    
+
 	    	if(Remainder != 0){
 	    		Remainder--;
 	    		leftover++;
@@ -120,27 +121,33 @@ int main(int argc, char *argv[]) {
 	    	if(indexrow < IterationsPerThread +leftover+indexrow){
 	    		number = 1;
 	    		int size = N * (IterationsPerThread + leftover);
+	    		int bsize = size/3;
 			printf("sending size = %d\n", size);
 	    		MPI_Send(&number, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
 	    		MPI_Send(&size, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
 	    		MPI_Send(A[indexrow], size, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
+	    		MPI_Send(b[count], bsize, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
 	    		indexrow = indexrow + IterationsPerThread + leftover;
+	    		count++;
 	    	}else{
 	    		number = 0;
 	    		int size = 1;
 	    		MPI_Send(&number, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
 	    		MPI_Send(&size, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
 	    		MPI_Send(A[0], 1, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
+	    		MPI_Send(b[count], 1, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD)
 	    	}
-		    printf("Sent first time %d\n", k); 
+		    printf("Sent first time %d\n", k);
 	    	}
 	    }
 		else {  // receive my part of A
 		MPI_Recv(&number, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 		MPI_Recv(&size, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-		printf("number and size = %d and %d from node %s, rank %d\n", number, size, processor_name, myrank);	
+		printf("number and size = %d and %d from node %s, rank %d\n", number, size, processor_name, myrank);
+		int bsize = size/3;
 	    MPI_Recv(A[0], size, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-			printf("Recieved first time %d\n", k); 
+	    MPI_Recv(b[0], size, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+			printf("Recieved first time %d\n", k);
 		  }
 
 	MPI_Barrier(MPI_COMM_WORLD);
@@ -182,12 +189,12 @@ int main(int argc, char *argv[]) {
 			    		MPI_Recv(A[indexrow], size, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 			    		indexrow = indexrow + IterationsPerThread + leftover;
 			    	}
-				    printf("Recieved Second time %d\n", k); 
+				    printf("Recieved Second time %d\n", k);
 			    }
 	}else{
 		if(number == 1){
 		MPI_Send(A[0], size, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD);
-			printf("Sent Second time %d\n", k); 
+			printf("Sent Second time %d\n", k);
 		}
 	}
 
@@ -205,7 +212,7 @@ int main(int argc, char *argv[]) {
 
 	 MPI_Barrier(MPI_COMM_WORLD);
 	}
-	
+
 	if(myrank == 0){
 		for(int i=N-1; i >= 0; i--){
 			x[i] = b[i];
@@ -215,11 +222,11 @@ int main(int argc, char *argv[]) {
 			  	x[i] = x[i]/A[i][i];
 			printf("x%d = %f\n", i, x[i]);
 			}
-		
-	}
-	
 
-	
+	}
+
+
+
 
 
 

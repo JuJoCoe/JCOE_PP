@@ -213,7 +213,7 @@ int main(int argc, char *argv[]) {
 				}
 				x[i] = x[i]/A[i][i];
 			}
-		for(int k = N-1; k >=0; k--){
+		for(int q = N-1; q >=0; q--){
 		}
 	}
 	

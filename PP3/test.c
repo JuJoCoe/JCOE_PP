@@ -128,7 +128,7 @@ int main(int argc, char *argv[]) {
 	    		MPI_Send(A[indexrow], size, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
 	    		MPI_Send(&b[count], bsize, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
 	    		indexrow = indexrow + IterationsPerThread + leftover;
-	    		count++;
+	    		count = count+bsize;
 	    	}else{
 	    		number = 0;
 	    		int size = 1;

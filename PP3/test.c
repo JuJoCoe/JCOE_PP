@@ -89,9 +89,11 @@ int main(int argc, char *argv[]) {
 				A[k][j] = A[k][j]/y;
 			}
 			A[k][k] = 1.0;
+			b[k] = b[k]/y;
+			MPI_Bcast(B[0], N, MPI_INT, 0, MPI_COMM_WORLD);
 		}
 		
-		b[k] = b[k]/y;
+		//b[k] = b[k]/y;
 
 
 

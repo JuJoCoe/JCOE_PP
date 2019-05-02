@@ -214,6 +214,7 @@ int main(int argc, char *argv[]) {
 				}
 			  	x[i] = x[i]/A[i][i];
 			}
+		printf("x%d = %f\n", i, x[i]);
 		
 	}
 	

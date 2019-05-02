@@ -206,7 +206,7 @@ int main(int argc, char *argv[]) {
 	if(myrank == 0){
 		for(i = 0; i < N; i++){
 				for(j=0; j < N; j++){
-					printf("A[%d][%d] = %f from node %s, rank %d\n", i, j, A[i][j], processor_name, myrank);
+					printf("A[%d][%d] = %f, b[%d] = %f from node %s, rank %d\n", i, j, A[i][j], j, b[j], processor_name, myrank);
 				}
 		}
 	}

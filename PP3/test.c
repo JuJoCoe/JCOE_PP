@@ -143,7 +143,7 @@ int main(int argc, char *argv[]) {
 		
 	if(number != 0){
 		for(int s = 0; s<(size/N); s++){
-//			printf("b[0] = %f\n", b[0]);
+			printf("b[0] = %f\n", b[0]);
 			float z = A[s][k];
 			for(int l = k+1; l<N; l++){
 				A[s][l] = A[s][l] - z*A[k][l];

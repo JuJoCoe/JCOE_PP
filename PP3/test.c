@@ -210,23 +210,13 @@ int main(int argc, char *argv[]) {
 			x[i] = b[i];
 				for(int j=N-1; j > i; j--){
 					x[i] = x[i] - A[i][j] * x[j];
+					printf("test"\n);
 				 }
 					x[i] = x[i]/A[i][i];
 			}
 	}
 
 	
-
-	if(myrank == 0){
-	if(N < 10){
-		//Print outputs
-		printf("\n");
-		printf("X Outputs:\n");
-		for(int l = 0; l < N; l++){
-		//	 printf("x%d = %f\n", l, x[l]);
-		}
-	}
-	}
 
 
 

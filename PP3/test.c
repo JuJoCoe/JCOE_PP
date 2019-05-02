@@ -81,13 +81,8 @@ int main(int argc, char *argv[]) {
 		b[2] = -3;
 	}
 	
-	for(i = 0; i < N; i++){
-		for(j=0; j < N; j++){
-	printf("A[%d][%d] = %f, b[%d] = %f from node %s, rank %d\n", i, j, A[i][j], j, b[j], processor_name, myrank);
-		}
-	}
 	for(k = 0; k < N ; k++){
-
+		printf("b[0] = %f\n", b[0]);
 		if (myrank == 0){
 			y = A[k][k];
 			for(int j = k+1; j < N; j++){
@@ -198,6 +193,7 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
+		/*
 	if(myrank == 0){
 		for(i = 0; i < N; i++){
 				for(j=0; j < N; j++){
@@ -206,7 +202,7 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
-
+*/
 
 
 

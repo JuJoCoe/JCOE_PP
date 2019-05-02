@@ -116,7 +116,6 @@ int main(int argc, char *argv[]) {
 	    	if(indexrow < IterationsPerThread +leftover+indexrow){
 	    		number = indexrow;
 	    		int size = N * (IterationsPerThread + leftover);
-		//	printf("sending size = %d\n", size);
 	    		MPI_Send(&number, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
 	    		MPI_Send(&size, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
 	    		MPI_Send(A[indexrow], size, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
@@ -128,7 +127,6 @@ int main(int argc, char *argv[]) {
 	    		MPI_Send(&size, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
 	    		MPI_Send(A[0], 1, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
 	    	}
-	//	    printf("Sent first time %d\n", k);
 	    	}
 	    }
 		else {  // receive my part of A
@@ -178,7 +176,7 @@ int main(int argc, char *argv[]) {
 			    		int size = N * (IterationsPerThread + leftover);
 			    		int bsize = size/3;
 			    		MPI_Recv(A[indexrow], size, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-			    		MPI_Recv(&b[indexrow], bsize, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+			    		MPI_Recv(b[indexrow], bsize, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 			    		indexrow = indexrow + IterationsPerThread + leftover;
 			    	}
 	//			    printf("Recieved Second time %d\n", k);
@@ -187,7 +185,7 @@ int main(int argc, char *argv[]) {
 		if(number != 0){
 		int bsize = size/3;
 		MPI_Send(A[0], size, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD);
-		MPI_Send(&b[0], bsize, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD);
+		MPI_Send(b[0], bsize, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD);
 	//		printf("Sent Second time %d\n", k);
 		}
 	}

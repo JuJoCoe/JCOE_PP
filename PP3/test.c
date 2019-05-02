@@ -146,7 +146,7 @@ int main(int argc, char *argv[]) {
 		printf("number and size = %d and %d from node %s, rank %d\n", number, size, processor_name, myrank);
 		int bsize = size/3;
 	    MPI_Recv(A[0], size, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-	    MPI_Recv(b[0], bsize, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+	    MPI_Recv(&b[0], bsize, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 			printf("Recieved first time %d\n", k);
 		  }
 

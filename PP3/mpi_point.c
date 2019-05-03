@@ -33,30 +33,52 @@ int main(int argc, char *argv[]) {
 	if (myrank == 0) {
 	    tmp = (double *) malloc (sizeof(double ) * N * N);
 	    A = (double **) malloc (sizeof(double *) * N);
+	    if(tmp == NULL){
+	    	printf("ERROR ALLOCATING");
+	    	 return -1;
+	    	    }
+	    if(A == NULL){
+	    	printf("ERROR ALLOCATING 2");
+	    	return -1;
+	    }
 	    for (i = 0; i < N; i++)
 	      A[i] = &tmp[i * N];
 	  }
-	 else {
+	  else {
 	    tmp = (double *) malloc (sizeof(double ) * ((N * N / numnodes)+1));
 	    A = (double **) malloc (sizeof(double *) * ((N / numnodes)+1));
+	    if(tmp == NULL){
+	   	    	    	printf("ERROR ALLOCATING 3");
+	   	    	    	return -1;
+	   	    	    }
+	    if(A == NULL){
+	    	printf("ERROR ALLOCATING 4");
+	    	return -1;
+	    	    }
 	    for (i = 0; i < N / numnodes; i++)
 	      A[i] = &tmp[i * N];
 	  }
 
 	//Allocate b
 	b = (double *) malloc (sizeof(double ) * N);
+	 if(b == NULL){
+		    	    	printf("ERROR ALLOCATING b");
+		    	    	return -1;
+		    	    }
 	for(i = 0; i < N; i++){
 		b[i] = 1.0;
 	}
 
 
 	//Allocate x
-	if(myrank == 0){
 	x = (double *) malloc (sizeof(double ) * N);
+	 if(x == NULL){
+		    	    	printf("ERROR ALLOCATING x");
+		    	    	return -1;
+		    	    }
 		for(i = 0; i < N; i++){
 			x[i] = 0.0;
 		}
-	}
 
 	//Populate Matrix
 	if(myrank == 0){

@@ -46,12 +46,14 @@ int main(int argc, char **argv)
 
     for(k=0;k<N;k++)
     {
+        if (myrank == 0){
     	float y = A[k][k];
     	for(int j = k+1; j < N; j++){
     		A[k][j] = A[k][j]/y;
     		}
     		A[k][k] = 1.0;
     		b[k] = b[k]/y;
+        }
         MPI_Bcast (&A[k][k],N-k,MPI_DOUBLE,index[k],MPI_COMM_WORLD);
         MPI_Bcast (&b[k],1,MPI_DOUBLE,index[k],MPI_COMM_WORLD);
  /*       for(i= k+1; i<N; i++)

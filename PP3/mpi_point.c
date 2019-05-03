@@ -128,7 +128,7 @@ int main(int argc, char *argv[]) {
 					//Left over iterations that will be given to some threads
 		int Remainder = TotalIterations%numnodes;
 					//Which indexrow to start at
-		indexrow = k+1;
+		indexrow = k;
 
 	    for (i=1; i<numnodes; i++) {
 		leftover = 0;

@@ -44,6 +44,10 @@ int main(int argc, char **argv)
         index[i]= i % numnodes;
     }
 
+    if (myrank == 0) {
+    startTime = MPI_Wtime();
+  }
+
     for(k=0;k<N;k++)
     {
         if (myrank == 0){
@@ -78,6 +82,11 @@ int main(int argc, char **argv)
                 }
             }
         }
+
+    if (myrank == 0) {
+    endTime = MPI_Wtime();
+    printf("Time is %f\n", endTime-startTime);
+  }
 
 
     if (myrank==0){

@@ -128,7 +128,7 @@ int main(int argc, char *argv[]) {
 					//Left over iterations that will be given to some threads
 		int Remainder = TotalIterations%numnodes;
 					//Which indexrow to start at
-		indexrow = k;
+		indexrow = k+1;
 
 	    for (i=1; i<numnodes; i++) {
 		leftover = 0;
@@ -166,7 +166,7 @@ int main(int argc, char *argv[]) {
 		//	printf("k = %d\n" , k);
 			float z = A[s][k];
 			for(int l = k+1; l<N; l++){
-				A[s][l] = A[s][l] - z*A[k][l];
+				A[s][l] = A[s][l] - z*A[k-1][l];
 			}
 
 				b[number] = b[number] - A[s][k] * b[k];

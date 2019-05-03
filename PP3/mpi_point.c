@@ -36,10 +36,10 @@ int main(int argc, char *argv[]) {
 	    for (i = 0; i < N; i++)
 	      A[i] = &tmp[i * N];
 	  }
-	  else {
-	    tmp = (double *) malloc (sizeof(double ) * N * N);
-	    A = (double **) malloc (sizeof(double *) * N);
-	    for (i = 0; i < N; i++)
+	 else {
+	    tmp = (double *) malloc (sizeof(double ) * ((N * N / numnodes)+1));
+	    A = (double **) malloc (sizeof(double *) * ((N / numnodes)+1));
+	    for (i = 0; i < N / numnodes; i++)
 	      A[i] = &tmp[i * N];
 	  }
 
@@ -51,10 +51,12 @@ int main(int argc, char *argv[]) {
 
 
 	//Allocate x
+	if(myrank == 0){
 	x = (double *) malloc (sizeof(double ) * N);
 		for(i = 0; i < N; i++){
 			x[i] = 0.0;
 		}
+	}
 
 	//Populate Matrix
 	if(myrank == 0){

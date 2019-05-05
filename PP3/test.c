@@ -55,7 +55,8 @@ int main(int argc, char **argv)
     		  	  LocalA[i] = &tmp[i * N];
 
 */
-    	//Allocate b to everyone
+    /*	
+    //Allocate b to everyone
     	b = (double *) malloc (sizeof(double ) * N);
     	 if(b == NULL){
     		 printf("ERROR ALLOCATING b in cluster %s", processor_name);
@@ -77,7 +78,7 @@ int main(int argc, char **argv)
     			x[i] = 0.0;
     		}
     	}
-
+*/
 
 /*
    if(myrank == 0){
@@ -99,4 +100,6 @@ int main(int argc, char **argv)
 
 //   MPI_Scatter(A[0], numElements, MPI_DOUBLE, LocalA[0], numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
+    MPI_Finalize();
+	return 0;
 }

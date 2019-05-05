@@ -139,9 +139,11 @@ int main(int argc, char *argv[]) {
 
 	for(int s = 0; s<(sizeof(A)/sizeof(A[0])); s++){
 		float z = A[s][k];
-		for(int l = k+1; l<N+1; l++){
+		int testsize = sizeof(A)/sizeof(A[0]));
+		printf("A has %d rows\n", testsize);
+		for(int l = k+1; l<N; l++){
 			A[s][l] = A[s][l] - z*A[s][l];
-			printf("Printed HERE\n");
+			//printf("Printed HERE\n");
 		}
 			b[s] = b[s] - A[s][k] * b[k];
 			A[s][k] = 0.0;

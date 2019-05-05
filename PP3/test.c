@@ -40,6 +40,7 @@ int main(int argc, char **argv)
     	    for (i = 0; i < N; i++)
     	      A[i] = &tmp[i * N];
     	  }
+    /*
     		   tmp = (double *) malloc (sizeof(double ) * ((N * N / numnodes)+1));
     		   LocalA = (double **) malloc (sizeof(double *) * ((N / numnodes)+1));
     		   if(tmp == NULL){
@@ -53,7 +54,7 @@ int main(int argc, char **argv)
     		  	for (i = 0; i < N / numnodes; i++)
     		  	  LocalA[i] = &tmp[i * N];
 
-
+*/
     	//Allocate b to everyone
     	b = (double *) malloc (sizeof(double ) * N);
     	 if(b == NULL){
@@ -78,7 +79,7 @@ int main(int argc, char **argv)
     	}
 
 
-
+/*
    if(myrank == 0){
     srand(1);
     for(int i = 0; i < N; i++){
@@ -94,7 +95,7 @@ int main(int argc, char **argv)
     		 }
     	 }
    }
-
+*/
 
 //   MPI_Scatter(A[0], numElements, MPI_DOUBLE, LocalA[0], numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 

@@ -6,7 +6,7 @@
 int main(int argc, char **argv)
 {
 
-    double **A, **LocalA, *b, *x, *tmp;
+    double **A,*b, *x, *tmp;
     int i,j,k;
     int index[500];
     int N=2000;
@@ -27,7 +27,7 @@ int main(int argc, char **argv)
     //Allocate memory for matrix A (Memory allocation code received from Yong Chen)
 	
     	A = (double **) malloc (sizeof(double *) * N);
-	LocalA = (double **) malloc (sizeof(double *) * N / numnodes);
+	double* LocalA = (double*)malloc(sizeof(double)*N*N/numnodes);
 
     	
     //Allocate b to everyone

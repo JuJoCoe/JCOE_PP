@@ -119,7 +119,7 @@ int main(int argc, char **argv)
     		}
     		A[k][k] = 1.0;
     		b[k] = b[k]/y;
-    		MPI_Scatter(A[0], numElements, MPI_DOUBLE, A[0], numElements, 0, MPI_COMM_WORLD);
+    		MPI_Scatter(A[0], numElements, MPI_DOUBLE, A[0], numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     		
     		
         }

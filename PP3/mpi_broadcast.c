@@ -121,7 +121,7 @@ int main(int argc, char **argv)
     		b[k] = b[k]/y;
     		
         }
-	MPI_Scatter(A[0], numElements, MPI_DOUBLE, A[myrank], numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+	MPI_Scatter(A, numElements, MPI_DOUBLE, A, numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
         MPI_Bcast (&b[k],1,MPI_DOUBLE,index[k],MPI_COMM_WORLD);
  
         for(i= k+1; i<N; i++)

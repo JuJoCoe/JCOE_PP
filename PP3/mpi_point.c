@@ -166,7 +166,7 @@ int main(int argc, char *argv[]) {
 		//	printf("k = %d\n" , k);
 			float z = A[s][k];
 			for(int l = k+1; l<N; l++){
-				A[s][l] = A[s][l] - z*A[k-1][l];
+				A[s][l] = A[s][l] - z*A[s][l];
 			}
 
 				b[number] = b[number] - A[s][k] * b[k];

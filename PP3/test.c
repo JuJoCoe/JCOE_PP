@@ -28,6 +28,20 @@ int main(int argc, char **argv)
 	
 
     A = (double **) malloc (sizeof(double *) * N);
+	tmp = (double *) malloc (sizeof(double ) * ((N * N / numnodes)+1));
+	    LocalA = (double **) malloc (sizeof(double *) * ((N / numnodes)+1));
+	    if(tmp == NULL){
+	    	printf("ERROR ALLOCATING tmp in cluster %s", processor_name);
+	    	return -1;
+	   	   	}
+	    if(LocalA == NULL){
+	    	printf("ERROR ALLOCATING A in cluster %s", processor_name);
+	    	return -1;
+	    	}
+	    for (i = 0; i < N / numnodes; i++)
+	      LocalA[i] = &tmp[i * N];
+	  }
+
     //Allocate b to everyone
     	b = (double *) malloc (sizeof(double ) * N);
     	 if(b == NULL){
@@ -73,7 +87,7 @@ int main(int argc, char **argv)
 	numElements = 1;
 
 	
-   MPI_Scatter(&A[0][0], numElements, MPI_DOUBLE, &A[0][0], numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+   MPI_Scatter(&A[0][0], numElements, MPI_DOUBLE, LocalA, numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 	
 	if(myrank == 0){
 	printf("A[0][0] = %f\n", A[1][0]);	

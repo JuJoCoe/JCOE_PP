@@ -33,18 +33,38 @@ int main(int argc, char *argv[]) {
 	if (myrank == 0) {
 	    tmp = (double *) malloc (sizeof(double ) * N * N);
 	    A = (double **) malloc (sizeof(double *) * N);
+	    if(tmp == NULL){
+	    	printf("ERROR ALLOCATING");
+	    	 return -1;
+	    	    }
+	    if(A == NULL){
+	    	printf("ERROR ALLOCATING 2");
+	    	return -1;
+	    }
 	    for (i = 0; i < N; i++)
 	      A[i] = &tmp[i * N];
 	  }
 	  else {
-	    tmp = (double *) malloc (sizeof(double ) * N * N);
-	    A = (double **) malloc (sizeof(double *) * N);
-	    for (i = 0; i < N; i++)
+	    tmp = (double *) malloc (sizeof(double ) * ((N * N / numnodes)+1));
+	    A = (double **) malloc (sizeof(double *) * ((N / numnodes)+1));
+	    if(tmp == NULL){
+	   	    	    	printf("ERROR ALLOCATING 3");
+	   	    	    	return -1;
+	   	    	    }
+	    if(A == NULL){
+	    	printf("ERROR ALLOCATING 4");
+	    	return -1;
+	    	    }
+	    for (i = 0; i < N / numnodes; i++)
 	      A[i] = &tmp[i * N];
 	  }
 
 	//Allocate b
 	b = (double *) malloc (sizeof(double ) * N);
+	 if(b == NULL){
+		    	    	printf("ERROR ALLOCATING b");
+		    	    	return -1;
+		    	    }
 	for(i = 0; i < N; i++){
 		b[i] = 1.0;
 	}
@@ -52,6 +72,10 @@ int main(int argc, char *argv[]) {
 
 	//Allocate x
 	x = (double *) malloc (sizeof(double ) * N);
+	 if(x == NULL){
+		    	    	printf("ERROR ALLOCATING x");
+		    	    	return -1;
+		    	    }
 		for(i = 0; i < N; i++){
 			x[i] = 0.0;
 		}
@@ -96,6 +120,7 @@ int main(int argc, char *argv[]) {
 
 
 	if (myrank == 0) {
+		printf("k = %d\n", k);
 
 		//Calculates total number of times the inner loop will run
 		int TotalIterations = N - (k+1);
@@ -142,7 +167,7 @@ int main(int argc, char *argv[]) {
 		//	printf("k = %d\n" , k);
 			float z = A[s][k];
 			for(int l = k+1; l<N; l++){
-				A[s][l] = A[s][l] - z*A[k][l];
+				A[s][l] = A[s][l] - z*A[s][l];
 			}
 
 				b[number] = b[number] - A[s][k] * b[k];
@@ -207,7 +232,7 @@ int main(int argc, char *argv[]) {
 
 
 
-//	 MPI_Barrier(MPI_COMM_WORLD);
+MPI_Barrier(MPI_COMM_WORLD);
 	}
 
 	if(myrank == 0){

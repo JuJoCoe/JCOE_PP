@@ -120,6 +120,7 @@ int main(int argc, char *argv[]) {
 
 
 	if (myrank == 0) {
+		printf("k = %d\n", k);
 
 		//Calculates total number of times the inner loop will run
 		int TotalIterations = N - (k+1);

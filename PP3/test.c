@@ -139,8 +139,10 @@ int main(int argc, char *argv[]) {
 
 	for(int s = 0; s<(sizeof(A)/sizeof(A[0])); s++){
 		float z = A[s][k];
+		int total = sizeof(A);
+		int row = sizeof(A[0]);
 		int testsize = sizeof(A)/sizeof(A[0]);
-		printf("A has %d rows\n", testsize);
+		printf("A has %d rows\n, total = %d, row = %d", testsize, total, row);
 		for(int l = k+1; l<N; l++){
 			A[s][l] = A[s][l] - z*A[s][l];
 			//printf("Printed HERE\n");

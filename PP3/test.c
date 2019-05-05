@@ -133,7 +133,7 @@ int main(int argc, char *argv[]) {
     		}
   	}
   	else {  // receive my part of A
-			MPI_Recv(&indexrow, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+		MPI_Recv(&indexrow, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
     		MPI_Recv(A[0], stripSize * N, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
   	}
 
@@ -147,6 +147,7 @@ int main(int argc, char *argv[]) {
 		}
 
 MPI_Barrier(MPI_COMM_WORLD);
+		
 
 if (myrank == 0) {
    offset = stripSize;
@@ -161,8 +162,12 @@ if (myrank == 0) {
  }
 
 	}
-
-	if(myrank == 0){
+if (myrank == 0) {
+    endTime = MPI_Wtime();
+    printf("Time is %f\n", endTime-startTime);
+  }
+	
+if(myrank == 0){
 		for(int i=N-1; i >= 0; i--){
 			x[i] = b[i];
 			for(int j=N-1; j > i; j--){
@@ -175,10 +180,7 @@ if (myrank == 0) {
 	}
 
 
-	if (myrank == 0) {
-    endTime = MPI_Wtime();
-    printf("Time is %f\n", endTime-startTime);
-  }
+
 
 
 

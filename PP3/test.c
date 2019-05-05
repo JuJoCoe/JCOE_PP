@@ -99,7 +99,7 @@ int main(int argc, char **argv)
    }
 
 
-   MPI_Scatter(A[0], numElements, MPI_DOUBLE, LocalA[0], numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+   MPI_Scatter(A, numElements, MPI_DOUBLE, LocalA, numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
     MPI_Finalize();
 	return 0;

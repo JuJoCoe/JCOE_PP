@@ -100,6 +100,8 @@ int main(int argc, char **argv)
 
 
    MPI_Scatter(A, numElements, MPI_DOUBLE, LocalA, numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+	
+	printf("A[0][0] = %f\n", LocalA[0][0]);
 
     MPI_Finalize();
 	return 0;

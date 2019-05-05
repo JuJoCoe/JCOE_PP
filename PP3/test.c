@@ -146,7 +146,7 @@ int main(int argc, char *argv[]) {
 			A[s][k] = 0.0;
 		}
 
-MPI_Barrier(MPI_COMM_WORLD);
+
 		
 
 if (myrank == 0) {

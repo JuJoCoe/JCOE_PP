@@ -6,7 +6,7 @@
 int main(int argc, char **argv)
 {
 
-	double **A, **LocalA, *b, *x, *tmp;
+    double **A, **LocalA, *b, *x, *tmp;
     int i,j,k;
     int index[500];
     int N=2000;
@@ -46,12 +46,12 @@ int main(int argc, char **argv)
     		  	  	printf("ERROR ALLOCATING tmp in cluster %s", processor_name);
     		  	   	return -1;
     		  	}
-    		  	if(A == NULL){
+    		  	if(LocalA == NULL){
     		  		printf("ERROR ALLOCATING A in cluster %s", processor_name);
     		  	    return -1;
     		  	}
     		  	for (i = 0; i < N / numnodes; i++)
-    		  	  A[i] = &tmp[i * N];
+    		  	  LocalA[i] = &tmp[i * N];
 
 
     	//Allocate b to everyone

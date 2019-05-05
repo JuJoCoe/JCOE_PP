@@ -6,11 +6,11 @@
 int main(int argc, char **argv)
 {
 
-    double **A, *b, *x, *tmp;
+	double **A, *b, *x, *tmp;
     int i,j,k;
     int index[500];
     int N=2000;
-    int myrank, numnodes;
+    int myrank, numnodes, stripSize, offset, numElements;
     double startTime, endTime;
 
     MPI_Init(&argc, &argv);
@@ -25,7 +25,7 @@ int main(int argc, char **argv)
     N = atoi(argv[1]);
 
     //Allocate memory for matrix A (Memory allocation code received from Yong Chen)
-  //  	if (myrank == 0) {
+    	if (myrank == 0) {
     	    tmp = (double *) malloc (sizeof(double ) * N * N);
     	    A = (double **) malloc (sizeof(double *) * N);
     	    if(tmp == NULL){
@@ -39,7 +39,20 @@ int main(int argc, char **argv)
 
     	    for (i = 0; i < N; i++)
     	      A[i] = &tmp[i * N];
-   // 	  }
+    	  }else{
+    		  tmp = (double *) malloc (sizeof(double ) * ((N * N / numnodes)+1));
+    		   A = (double **) malloc (sizeof(double *) * ((N / numnodes)+1));
+    		   if(tmp == NULL){
+    		  	  	printf("ERROR ALLOCATING tmp in cluster %s", processor_name);
+    		  	   	return -1;
+    		  	}
+    		  	if(A == NULL){
+    		  		printf("ERROR ALLOCATING A in cluster %s", processor_name);
+    		  	    return -1;
+    		  	}
+    		  	for (i = 0; i < N / numnodes; i++)
+    		  	  A[i] = &tmp[i * N];
+    	  }
 
     	//Allocate b to everyone
     	b = (double *) malloc (sizeof(double ) * N);
@@ -82,7 +95,7 @@ int main(int argc, char **argv)
     	 }
    }
 
-    MPI_Bcast (A[0],N*N,MPI_DOUBLE,0,MPI_COMM_WORLD);
+   
     MPI_Bcast (&b[0],N,MPI_DOUBLE,0,MPI_COMM_WORLD);
 
     for(i=0; i<N; i++)
@@ -92,10 +105,13 @@ int main(int argc, char **argv)
 
     if (myrank == 0) {
     startTime = MPI_Wtime();
+    
   }
 
     for(k=0;k<N;k++)
     {
+    	stripSize = N/numnodes;
+    	numElements = stripSize * N;
         if (myrank == 0){
     	float y = A[k][k];
     	for(int j = k+1; j < N; j++){
@@ -103,16 +119,12 @@ int main(int argc, char **argv)
     		}
     		A[k][k] = 1.0;
     		b[k] = b[k]/y;
+    		MPI_Scatter(A[0], numElements, MPI_DOUBLE, A[0], numElements, 0, MPI_COMM_WORLD);
+    		
+    		
         }
-        MPI_Bcast (A[k],N-k,MPI_DOUBLE,index[k],MPI_COMM_WORLD);
         MPI_Bcast (&b[k],1,MPI_DOUBLE,index[k],MPI_COMM_WORLD);
- /*       for(i= k+1; i<N; i++)
-        {
-            if(index[i] == myrank)
-            {
-                multiplier[i]=A[i][k]/A[k][k];
-            }
-        }*/
+ 
         for(i= k+1; i<N; i++)
         {
         	float z = A[i][k];
@@ -120,7 +132,7 @@ int main(int argc, char **argv)
             {
                 for(j=0;j<N;j++)
                 {
-                	A[i][j] = A[i][j] - z*A[k][j];
+                	A[i][j] = A[i][j] - z*A[i][j];
                 				}
 
                 	b[i] = b[i] - A[i][k] * b[k];

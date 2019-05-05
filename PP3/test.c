@@ -138,7 +138,7 @@ int main(int argc, char *argv[]) {
     		MPI_Recv(A[0], stripSize * N, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
   	}
 
-	for(int s = 0; s<(sizeof(A)/sizeof(A[0])); s++){
+	for(int s = 0; s<stripSize; s++){
 		float z = A[s][k];
 		int total = sizeof(A);
 		int row = sizeof(A[0]);

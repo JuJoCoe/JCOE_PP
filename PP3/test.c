@@ -123,7 +123,6 @@ int main(int argc, char *argv[]) {
 
   // send each node its piece of A -- note could be done via MPI_Scatter
  	 if (myrank == 0) {
-		printf("N = %d, numnodes = %d, stirpSize = %d\n", N, numnodes, stripSize); 
     		offset = stripSize;
     		numElements = stripSize * N;
     		for (i=1; i<numnodes; i++) {
@@ -140,10 +139,6 @@ int main(int argc, char *argv[]) {
 
 	for(int s = 0; s<stripSize; s++){
 		float z = A[s][k];
-		int total = sizeof(A);
-		int row = sizeof(A[0]);
-		int testsize = sizeof(A)/sizeof(A[0]);
-		printf("A has %d rows, total = %d, row = %d\n", testsize, total, row);
 		for(int l = k+1; l<N; l++){
 			A[s][l] = A[s][l] - z*A[s][l];
 			//printf("Printed HERE\n");

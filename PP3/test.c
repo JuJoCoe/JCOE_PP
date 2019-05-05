@@ -123,6 +123,7 @@ int main(int argc, char *argv[]) {
 
   // send each node its piece of A -- note could be done via MPI_Scatter
  	 if (myrank == 0) {
+		printf("N = %d, numnodes = %d, stirpSize = %d\n", N, numnodes, stripSize); 
     		offset = stripSize;
     		numElements = stripSize * N;
     		for (i=1; i<numnodes; i++) {

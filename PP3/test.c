@@ -6,7 +6,7 @@
 int main(int argc, char **argv)
 {
 
-    double **A,*b, *x, *tmp;
+    double **A, **LocalA, *b, *x, *tmp;
     int i,j,k;
     int index[500];
     int N=2000;

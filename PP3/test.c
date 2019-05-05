@@ -103,11 +103,12 @@ int main(int argc, char **argv)
 	
    MPI_Scatter(&A[0], numElements, MPI_DOUBLE, &LocalA[0], numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 	
-//	if(myrank == 0){
-//	printf("A[0][0] = %f\n", A[1][0]);	
-//	}
+	if(myrank == 0){
+	printf("A[0][0] = %f\n", A[1][0]);	
+	}else{
 	printf("A[0][0] = %f\n", LocalA[0][0]);
-
+	}
+	
     MPI_Finalize();
 	return 0;
 }

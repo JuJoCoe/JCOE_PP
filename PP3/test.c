@@ -106,7 +106,7 @@ int main(int argc, char **argv)
 	if(myrank == 0){
 	printf("A[0][0] = %f\n", A[1][0]);	
 	}else{
-	printf("LocalA[0][0] = %f\n", LocalA[0][0]);
+	//printf("LocalA[0][0] = %f\n", LocalA[0][0]);
 	}
 	
     MPI_Finalize();

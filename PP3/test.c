@@ -127,13 +127,13 @@ int main(int argc, char *argv[]) {
     		numElements = stripSize * N;
     		for (i=1; i<numnodes; i++) {
 			indexrow = offset;
-			MPI_Send(&indexrow, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
+			//MPI_Send(&indexrow, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
       			MPI_Send(A[offset], numElements, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
       			offset += stripSize;
     		}
   	}
   	else {  // receive my part of A
-		MPI_Recv(&indexrow, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+		//MPI_Recv(&indexrow, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
     		MPI_Recv(A[0], stripSize * N, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
   	}
 

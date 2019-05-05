@@ -40,7 +40,7 @@ int main(int argc, char **argv)
 	    	}
 	    for (i = 0; i < N / numnodes; i++)
 	      LocalA[i] = &tmp[i * N];
-	  }
+	  
 
     //Allocate b to everyone
     	b = (double *) malloc (sizeof(double ) * N);

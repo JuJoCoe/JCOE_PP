@@ -25,6 +25,7 @@ int main(int argc, char **argv)
     N = atoi(argv[1]);
 
     //Allocate memory for matrix A (Memory allocation code received from Yong Chen)
+	/*
     	if (myrank == 0) {
     	    tmp = (double *) malloc (sizeof(double ) * N * N);
     	    A = (double **) malloc (sizeof(double *) * N);
@@ -39,7 +40,7 @@ int main(int argc, char **argv)
 
     	    for (i = 0; i < N; i++)
     	      A[i] = &tmp[i * N];
-    	  }
+    	  }*/
     /*
     		   tmp = (double *) malloc (sizeof(double ) * ((N * N / numnodes)+1));
     		   LocalA = (double **) malloc (sizeof(double *) * ((N / numnodes)+1));

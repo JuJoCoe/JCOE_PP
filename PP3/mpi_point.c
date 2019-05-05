@@ -10,12 +10,8 @@ int main(int argc, char *argv[]) {
 	double startTime, endTime;
 	int myrank, numnodes, stripSize, offset, numElements;
 	int i, j, k;
-	int number = 0;
 	double y;
-	int leftover;
 	int indexrow;
-	int size;
-	int count = 0;
 
 	MPI_Init(&argc, &argv);
 
@@ -29,56 +25,60 @@ int main(int argc, char *argv[]) {
 
 	N = atoi(argv[1]);
 
-	//Allocate A
+	//Allocate memory for matrix A (Memory allocation code received from Yong Chen)
 	if (myrank == 0) {
 	    tmp = (double *) malloc (sizeof(double ) * N * N);
 	    A = (double **) malloc (sizeof(double *) * N);
 	    if(tmp == NULL){
-	    	printf("ERROR ALLOCATING");
-	    	 return -1;
-	    	    }
-	    if(A == NULL){
-	    	printf("ERROR ALLOCATING 2");
+	    	printf("ERROR ALLOCATING tmp in rank 0");
 	    	return -1;
 	    }
+	    if(A == NULL){
+	    	printf("ERROR ALLOCATING A in rank 0");
+	    	return -1;
+	    }
+
 	    for (i = 0; i < N; i++)
 	      A[i] = &tmp[i * N];
 	  }
+	//Allocate memory for matrix A in other processes
 	  else {
 	    tmp = (double *) malloc (sizeof(double ) * ((N * N / numnodes)+1));
 	    A = (double **) malloc (sizeof(double *) * ((N / numnodes)+1));
 	    if(tmp == NULL){
-	   	    	    	printf("ERROR ALLOCATING 3");
-	   	    	    	return -1;
-	   	    	    }
-	    if(A == NULL){
-	    	printf("ERROR ALLOCATING 4");
+	    	printf("ERROR ALLOCATING tmp in cluster %s", processor_name);
 	    	return -1;
-	    	    }
+	   	   	}
+	    if(A == NULL){
+	    	printf("ERROR ALLOCATING A in cluster %s", processor_name);
+	    	return -1;
+	    	}
 	    for (i = 0; i < N / numnodes; i++)
 	      A[i] = &tmp[i * N];
 	  }
 
-	//Allocate b
+	//Allocate b to everyone
 	b = (double *) malloc (sizeof(double ) * N);
 	 if(b == NULL){
-		    	    	printf("ERROR ALLOCATING b");
-		    	    	return -1;
-		    	    }
+		 printf("ERROR ALLOCATING b in cluster %s", processor_name);
+		 return -1;
+		 }
 	for(i = 0; i < N; i++){
 		b[i] = 1.0;
 	}
 
 
-	//Allocate x
+	//Allocate x to only rank 0
+	if(myrank == 0){
 	x = (double *) malloc (sizeof(double ) * N);
 	 if(x == NULL){
-		    	    	printf("ERROR ALLOCATING x");
-		    	    	return -1;
-		    	    }
+		 printf("ERROR ALLOCATING x in cluster %s", processor_name);
+		 return -1;
+		 }
 		for(i = 0; i < N; i++){
 			x[i] = 0.0;
 		}
+	}
 
 	//Populate Matrix
 	if(myrank == 0){
@@ -88,24 +88,26 @@ int main(int argc, char *argv[]) {
 			 	A[i][j] = (rand() % 11) - 5;
 			 	if(A[i][j] == 0){
 			 		A[i][j] = 1;
-			 			}
-			 		 }
-			 		 b[i] = rand() % (10 + 1 - 0) + 0;
-			 		 if(b[i] == 0){
-			 			 b[i] = 1;
-			 		 }
-			 	 	 }
-
+			 	}
+			}
+			 b[i] = rand() % (10 + 1 - 0) + 0;
+			 if(b[i] == 0){
+				 b[i] = 1;
+			 }
+		}
+		//Send b to all processes
 		MPI_Bcast(&b[0], N, MPI_INT, 0, MPI_COMM_WORLD);
 	}
 
-
+	//Start Timing
 	if (myrank == 0) {
     		startTime = MPI_Wtime();
 	  }
 
+	//Gaussian Elimination
 	for(k = 0; k < N ; k++){
 
+		//Initial row operations, only happens on rank 0 and broadcast changes to b
 		if (myrank == 0){
 			y = A[k][k];
 			for(int j = k+1; j < N; j++){
@@ -118,123 +120,61 @@ int main(int argc, char *argv[]) {
 
 
 
+	//Size every process will get
+	stripSize = N/numnodes;
 
+	//Send each node a chunk of A and the index that the matrix is on, used in row elimination
+ 	 if (myrank == 0) {
+    		offset = stripSize;
+    		numElements = stripSize * N;
+    		for (i=1; i<numnodes; i++) {
+			indexrow = offset;
+			MPI_Send(&indexrow, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
+      		MPI_Send(A[offset], numElements, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD);
+      		offset += stripSize;
+    		}
+  	}
+ 	 //All processes receive a chunk of A
+  	else {
+		MPI_Recv(&indexrow, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    	MPI_Recv(A[0], stripSize * N, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+  	}
+
+ 	 //row elimination done by all processes
+	for(int s = 0; s<stripSize; s++){
+		float z = A[s][k];
+		for(int l = k+1; l<N; l++){
+			A[s][l] = A[s][l] - z*A[s][l];
+		}
+			b[s] = b[s] - A[s][k] * b[k];
+			A[s][k] = 0.0;
+		}
+
+
+	//Receive work done from all processes
 	if (myrank == 0) {
-		printf("k = %d\n", k);
-
-		//Calculates total number of times the inner loop will run
-		int TotalIterations = N - (k+1);
-					//Calculates the total number of iteration each thread will run
-		int IterationsPerThread = TotalIterations/numnodes;
-					//Left over iterations that will be given to some threads
-		int Remainder = TotalIterations%numnodes;
-					//Which indexrow to start at
-		indexrow = k+1;
-
-	    for (i=1; i<numnodes; i++) {
-		leftover = 0;
-
-	    	if(Remainder != 0){
-	    		Remainder--;
-	    		leftover++;
-	    	}
-
-	    	if(indexrow < IterationsPerThread +leftover+indexrow){
-	    		number = indexrow;
-	    		int size = N * (IterationsPerThread + leftover);
-	    		MPI_Send(&number, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
-	    		MPI_Send(&size, 1, MPI_INT, i, TAG+1, MPI_COMM_WORLD);
-	    		MPI_Send(A[indexrow], size, MPI_DOUBLE, i, TAG+2, MPI_COMM_WORLD);
-	    		indexrow = indexrow + IterationsPerThread + leftover;
-	    	}else{
-	    		number = 0;
-	    		int size = 1;
-	    		MPI_Send(&number, 1, MPI_INT, i, TAG, MPI_COMM_WORLD);
-	    		MPI_Send(&size, 1, MPI_INT, i, TAG+1, MPI_COMM_WORLD);
-	    		MPI_Send(A[0], 1, MPI_DOUBLE, i, TAG+2, MPI_COMM_WORLD);
-	    	}
-	    	}
-	    }
-		else {  // receive my part of A
-		MPI_Recv(&number, 1, MPI_INT, 0, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-		MPI_Recv(&size, 1, MPI_INT, 0, TAG+1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-	        MPI_Recv(A[0], size, MPI_DOUBLE, 0, TAG+2, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-
-		  }
-
-	if(number != 0 && myrank != 0){
-		for(int s = 0; s<(size/N); s++){
-		//	printf("k = %d\n" , k);
-			float z = A[s][k];
-			for(int l = k+1; l<N; l++){
-				A[s][l] = A[s][l] - z*A[s][l];
-			}
-
-				b[number] = b[number] - A[s][k] * b[k];
-				A[s][k] = 0.0;
-
-			}
-
-	}
-		
-	if(numnodes == 1){
-		for(int s = 0; s<(N-(k+1)); s++){
-		//	printf("k = %d\n" , k);
-			float z = A[s][k];
-			for(int l = k+1; l<N; l++){
-				A[s][l] = A[s][l] - z*A[k][l];
-			}
-
-				b[number] = b[number] - A[s][k] * b[k];
-				A[s][k] = 0.0;
-
-			}
-	}
-		
-
-
-	//	printf("Completed row operations %d\n", k);
-	if(myrank == 0){
-		//Calculates total number of times the inner loop will run
-				int TotalIterations = N - (k+1);
-							//Calculates the total number of iteration each thread will run
-				int IterationsPerThread = TotalIterations/numnodes;
-							//Left over iterations that will be given to some threads
-				int Remainder = TotalIterations%numnodes;
-							//Which indexrow to start at
-				indexrow = k+1;
-
-			for (i=1; i<numnodes; i++) {
-				leftover = 0;
-
-			    	if(Remainder != 0){
-			    		Remainder--;
-			    		leftover++;
-			    	}
-
-			    	if(indexrow < IterationsPerThread +leftover+indexrow){
-			    		int size = N * (IterationsPerThread + leftover);
-			    		int bsize = size/3;
-			    		MPI_Recv(A[indexrow], size, MPI_DOUBLE, i, TAG+4, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-			    		MPI_Recv(&b[indexrow], bsize, MPI_DOUBLE, i, TAG+5, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-			    		indexrow = indexrow + IterationsPerThread + leftover;
-			    	}
-			    }
-	}else{
-		if(number != 0){
-		int bsize = size/3;
-		MPI_Send(A[0], size, MPI_DOUBLE, 0, TAG+4, MPI_COMM_WORLD);
-		MPI_Send(&b[0], bsize, MPI_DOUBLE, 0, TAG+5, MPI_COMM_WORLD);
+		offset = stripSize;
+		numElements = stripSize * N;
+		for (i=1; i<numnodes; i++) {
+			MPI_Recv(A[offset], numElements, MPI_DOUBLE, i, TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+			offset += stripSize;
 		}
 	}
 
-
-
-
-
-MPI_Barrier(MPI_COMM_WORLD);
+	//Send work done by all processes
+	else {
+		MPI_Send(A[0], stripSize * N, MPI_DOUBLE, 0, TAG, MPI_COMM_WORLD);
+	}
+		//Wait for all processes to finish there work in k
+		MPI_Barrier(MPI_COMM_WORLD);
+ }
+	//finish Gaussian Elimination
+	if (myrank == 0) {
+		endTime = MPI_Wtime();
+		printf("Time is %f\n", endTime-startTime);
 	}
 
+	//Back Sub only done my rank 0
 	if(myrank == 0){
 		for(int i=N-1; i >= 0; i--){
 			x[i] = b[i];
@@ -242,42 +182,9 @@ MPI_Barrier(MPI_COMM_WORLD);
 				x[i] = x[i] - A[i][j] * x[j];
 				}
 			  	x[i] = x[i]/A[i][i];
-		//	printf("x%d = %f\n", i, x[i]);
 			}
 
 	}
-
-
-	if (myrank == 0) {
-    endTime = MPI_Wtime();
-    printf("Time is %f\n", endTime-startTime);
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	MPI_Finalize();
 	return 0;

@@ -6,7 +6,7 @@
 int main(int argc, char **argv)
 {
 
-	double **A, *b, *x, *tmp;
+    double **A, *b, *x, *tmp;
     int i,j,k;
     int index[500];
     int N=2000;
@@ -82,8 +82,8 @@ int main(int argc, char **argv)
     	 }
    }
 
-    MPI_Bcast (A,N*N,MPI_DOUBLE,0,MPI_COMM_WORLD);
-    MPI_Bcast (&b,N,MPI_DOUBLE,0,MPI_COMM_WORLD);
+    MPI_Bcast (A[0],N*N,MPI_DOUBLE,0,MPI_COMM_WORLD);
+    MPI_Bcast (&b[0],N,MPI_DOUBLE,0,MPI_COMM_WORLD);
 
     for(i=0; i<N; i++)
     {
@@ -104,8 +104,8 @@ int main(int argc, char **argv)
     		A[k][k] = 1.0;
     		b[k] = b[k]/y;
         }
-        MPI_Bcast (A,N-k,MPI_DOUBLE,index[k],MPI_COMM_WORLD);
-        MPI_Bcast (&b,1,MPI_DOUBLE,index[k],MPI_COMM_WORLD);
+        MPI_Bcast (A[k],N-k,MPI_DOUBLE,index[k],MPI_COMM_WORLD);
+        MPI_Bcast (&b[k],1,MPI_DOUBLE,index[k],MPI_COMM_WORLD);
  /*       for(i= k+1; i<N; i++)
         {
             if(index[i] == myrank)

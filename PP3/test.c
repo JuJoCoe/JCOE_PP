@@ -58,7 +58,7 @@ int main(int argc, char **argv)
 
 	if(myrank == 0){
 	  A = createMatrix(N, N);
-	  printArray(A, N*N);
+	//  printArray(A, N*N);
 	}
 
 	//Every process allocates LocalA

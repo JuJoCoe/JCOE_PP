@@ -54,8 +54,7 @@ int main(int argc, char **argv)
 
 
     //Allocate memory for matrix A (Memory allocation code received from Yong Chen)
-	stripSize = N/numnodes;
-	numElements = stripSize;
+	numElements = (N*N)/numnodes;
 
 	if(myrank == 0){
 	  A = createMatrix(N, N);

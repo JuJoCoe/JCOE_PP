@@ -29,9 +29,9 @@ int main(int argc, char **argv)
     //Allocate memory for matrix A (Memory allocation code received from Yong Chen)
 	if(myrank == 0){
 		double A[N][N];
-	}else{
-		double LocalA[N/numnodes][N];
 	}
+		double LocalA[N/numnodes][N];
+	
 	  
 
     //Allocate b to everyone

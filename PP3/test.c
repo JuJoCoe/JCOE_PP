@@ -124,7 +124,7 @@ int main(int argc, char **argv)
     	            MPI_Scatter(A, numElements, MPI_DOUBLE, LocalA, numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     	            MPI_Bcast (&b[k],1,MPI_DOUBLE,index[k],MPI_COMM_WORLD);
 
-    	            for(i= k+1; i<numElements; i++)
+    	            for(i = 0; i<numElements; i++)
     	            {
     	                if(index[i] == myrank)
     	                {

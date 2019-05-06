@@ -92,23 +92,6 @@ int main(int argc, char **argv)
     	}
 
 
-
-   if(myrank == 0){
-    srand(1);
-    for(int i = 0; i < N; i++){
-    	for(int j = 0; j < N; j++){
-    	 	A[i][j] = (rand() % 11) - 5;
-         	if(A[i][j] == 0){
-    	 		A[i][j] = 1;
-    			}
-    		 }
-    		 b[i] = rand() % (10 + 1 - 0) + 0;
-    		 if(b[i] == 0){
-    	    	 b[i] = 1;
-    		 }
-    	 }
-   }
-
 	stripSize = N/numnodes;
 	numElements = stripSize;
 
@@ -116,8 +99,8 @@ int main(int argc, char **argv)
    MPI_Scatter(A, numElements, MPI_DOUBLE, LocalA, numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
    	   printf("Process %d received elements: ", myrank);
-       printArray(LocalA, numElements);
+      	   printArray(LocalA, numElements);
 
-    MPI_Finalize();
+        MPI_Finalize();
 	return 0;
 }

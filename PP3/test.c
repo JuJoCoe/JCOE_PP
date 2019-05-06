@@ -120,7 +120,7 @@ int main(int argc, char **argv)
 
     	            for(i= k+1; i<N; i++)
     	            {
-    	            	float z = localA[k * i];
+    	            	float z = LocalA[k * i];
     	                if(index[i] == myrank)
     	                {
     	                    for(j=0;j<N;j++)
@@ -149,7 +149,7 @@ int main(int argc, char **argv)
     	        	for(int i=N-1; i >= 0; i--){
     	        		x[i] = b[i];
     	        		for(int j=N-1; j > i; j--){
-    	        			x[i] = x[i] - A[i][j] * x[j];
+    	        			x[i] = x[i] - A[i*j] * x[j];
     	        			}
     	        			x[i] = x[i]/A[i*i];
     	        			}

@@ -109,7 +109,7 @@ int main(int argc, char **argv)
 	if(myrank == 0){
 	printf("A[0][0] = %f\n", A[1][0]);
 	}
-	printf("LocalA[0][0] = %f, rank = %d\n", LocalA[myrank][0], myrank);
+	printf("LocalA[0][0] = %f, rank = %d\n", LocalA[0][0], myrank);
 	
     MPI_Finalize();
 	return 0;

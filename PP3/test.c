@@ -59,7 +59,7 @@ int main(int argc, char **argv)
 	numElements = stripSize;
 
 	if(myrank == 0){
-	  A = creatematrix(N, N);
+	  A = createMatrix(N, N);
 	  printArray(A, N*N);
 	}
 

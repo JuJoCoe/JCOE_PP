@@ -41,7 +41,6 @@ int main(int argc, char **argv)
 {
     double *A, *b, *x;
     int i,j,k;
-    int index[2000];
     int N=2000;
     int myrank, numnodes, stripSize, offset, numElements;
     double startTime, endTime;
@@ -97,12 +96,7 @@ int main(int argc, char **argv)
 
     	
 
-   	   
-    	for(i=0; i<N; i++)
-    	    {
-    	        index[i]= i % numnodes;
-    	    }
-
+   	
     	    if (myrank == 0) {
     	    startTime = MPI_Wtime();
 
@@ -126,7 +120,7 @@ int main(int argc, char **argv)
 
     	           	for(i = 0; i < numElements; i++){
 			    float z = LocalA[k];	
-    	                    for(j=k+1;j<N;j++)
+    	                    for(j=k+1;j<N-1;j++)
     	                    {
     	                    	LocalA[j] = LocalA[j] - z*LocalA[j];
     	                    }

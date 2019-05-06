@@ -52,7 +52,7 @@ int main(int argc, char **argv)
 
     N = atoi(argv[1]);
 
-
+	printf("why arent you printing\n");
 
     //Allocate memory for matrix A (Memory allocation code received from Yong Chen)
 	stripSize = N/numnodes;

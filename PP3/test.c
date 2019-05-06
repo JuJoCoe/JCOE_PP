@@ -50,7 +50,7 @@ int main(int argc, char **argv)
 	    	printf("ERROR ALLOCATING tmp in cluster %s", processor_name);
 	    	return -1;
 	   	   	}
-	    if(A == NULL){
+	    if(LocalA == NULL){
 	    	printf("ERROR ALLOCATING A in cluster %s", processor_name);
 	    	return -1;
 	    	}

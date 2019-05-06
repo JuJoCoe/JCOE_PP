@@ -15,8 +15,14 @@ double *createMatrix (int nrows, int ncols){
         exit(1);
     }
 
+	srand(1);
     for (h=0; h<nrows*ncols; h++) {
-        matrix[h] = h+1;
+	
+	    
+        matrix[h] = (rand() % 11) - 5;
+	    if(matrix[h] == 0){
+    	 	matrix[h] = 1;
+    		}
     }
 
     return matrix;
@@ -58,7 +64,7 @@ int main(int argc, char **argv)
 
 	if(myrank == 0){
 	  A = createMatrix(N, N);
-	  printArray(A, N*N);
+	//  printArray(A, N*N);
 	}
 
 	//Every process allocates LocalA

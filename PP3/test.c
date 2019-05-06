@@ -99,27 +99,16 @@ int main(int argc, char **argv)
     		 }
     	 }
    }
-	for(int i = 0; i < N; i++){
-    		for(int j = 0; j < N; j++){
-			LocalA[i][j] == 0;
-	//		printf("LocalA = %f\n", LocalA[0][0]);
-		}
-	}
-	
 	
 	stripSize = N/numnodes;
 	numElements = 1;
 
 	
-   MPI_Scatter(A, numElements, MPI_DOUBLE, LocalA, numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+   MPI_Scatter(A[0], numElements, MPI_DOUBLE, LocalA, numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 	
-	if(myrank == 0){
 	printf("A[0][0] = %f\n", A[1][0]);	
 	printf("LocalA[0][0] = %f\n", LocalA[0][0]);
-	}
-	if(myrank == 1){
-	printf("LocalA[0][0] = %f from 1\n", LocalA[1][0]);
-	}
+	
     MPI_Finalize();
 	return 0;
 }

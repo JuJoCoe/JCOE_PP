@@ -108,7 +108,7 @@ int main(int argc, char **argv)
 	
 	
 	stripSize = N/numnodes;
-	numElements = stripSize;
+	numElements = 1;
 
 	
    MPI_Scatter(A, numElements, MPI_DOUBLE, LocalA, numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);

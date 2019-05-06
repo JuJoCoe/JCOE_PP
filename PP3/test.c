@@ -6,6 +6,8 @@
 
 
 double *createMatrix (int nrows, int ncols) {
+		printf("why arent you printing2\n");
+
     double *matrix;
     int h, i, j;
 

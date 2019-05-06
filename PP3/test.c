@@ -124,20 +124,17 @@ int main(int argc, char **argv)
     	            MPI_Scatter(A, numElements, MPI_DOUBLE, LocalA, numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     	            MPI_Bcast (&b[k],1,MPI_DOUBLE,index[k],MPI_COMM_WORLD);
 
-    	            for(i = 0; i<numElements; i++)
-    	            {
-    	               // if(index[i] == myrank)
-    	                //{
-			float z = LocalA[k];	
-    	                    for(j=0;j<numElements;j++)
+    	           	for(i = 0; i < numElements; i++){
+			    float z = LocalA[k];	
+    	                    for(j=k+1;j<N;j++)
     	                    {
     	                    	LocalA[j] = LocalA[j] - z*LocalA[j];
-    	                    	}
+    	                    }
 
     	                    	b[i] = b[i] - LocalA[k] * b[k];
     	                    	LocalA[k] = 0.0;
     	                    }
-    	                //}
+    	                
     	            MPI_Gather(LocalA, numElements, MPI_DOUBLE, A, numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     	            }
     	    

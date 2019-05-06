@@ -6,7 +6,7 @@
 int main(int argc, char **argv)
 {
 
-    double **A, **LocalA, *b, *x, *tmp;
+    double **A, **LocalA, *b, *x;
     int i,j,k;
     int index[250];
     int N=2000;
@@ -24,14 +24,15 @@ int main(int argc, char **argv)
     MPI_Get_processor_name(processor_name, &name_len);
 
     N = atoi(argv[1]);
-	int from = myrank * N;
+
+	
 
     //Allocate memory for matrix A (Memory allocation code received from Yong Chen)
 	stripSize = N/numnodes;
 	numElements = stripSize;
 	
 	if(myrank == 0){
-	    tmp = (double *) malloc (sizeof(double ) * N * N);
+	    double* tmp = (double*)malloc(N * N * sizeof(double));
 	    A = (double **) malloc (sizeof(double *) * N);
 	    if(tmp == NULL){
 	    	printf("ERROR ALLOCATING tmp in rank 0");
@@ -46,8 +47,8 @@ int main(int argc, char **argv)
 	      A[i] = &tmp[i * N];
 	}
 	//Every process allocates LocalA
-	    tmp = (double *) malloc (sizeof(double ) * N * N);
-	    LocalA = (double **) malloc (sizeof(double *) * N);
+	    double* tmp2 = (double*)malloc(numElements * N * sizeof(double));
+	    LocalA = (double **) malloc (sizeof(double *) * numElements);
 	    if(tmp == NULL){
 	    	printf("ERROR ALLOCATING tmp in cluster %s", processor_name);
 	    	return -1;

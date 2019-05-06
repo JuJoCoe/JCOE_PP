@@ -43,8 +43,7 @@ int main(int argc, char **argv)
 	    for (i = 0; i < N; i++)
 	      A[i] = &tmp[i * N];
 	  }
-	//Allocate memory for matrix A in other processes
-	  else {
+	//Every process allocates LocalA
 	    tmp = (double *) malloc (sizeof(double ) * ((N * N / numnodes)+1));
 	    LocalA = (double **) malloc (sizeof(double *) * ((N / numnodes)+1));
 	    if(tmp == NULL){

@@ -35,7 +35,7 @@ int main(int argc, char **argv)
 {
     double *A, *b, *x;
     int i,j,k;
-  //  int index[250];
+    int index[2000];
     int N=2000;
     int myrank, numnodes, stripSize, offset, numElements;
     double startTime, endTime;
@@ -90,15 +90,8 @@ int main(int argc, char **argv)
     	}
 
    MPI_Scatter(A, numElements, MPI_DOUBLE, LocalA, numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-
-   	   printf("Process %d received elements: ", myrank);
-      	   printArray(LocalA, numElements);
 	
-	LocalA[0] = 20.00;
 	MPI_Gather(LocalA, numElements, MPI_DOUBLE, A, numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-	if(myrank == 0){
-		printArray(A, N*N);
-	}
 
         MPI_Finalize();
 	return 0;

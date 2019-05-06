@@ -102,7 +102,7 @@ int main(int argc, char **argv)
 	for(int i = 0; i < N; i++){
     		for(int j = 0; j < N; j++){
 			LocalA[i][j] == 0;
-			printf("LocalA = %f\n", LocalA[0][0]);
+	//		printf("LocalA = %f\n", LocalA[0][0]);
 		}
 	}
 	
@@ -111,12 +111,12 @@ int main(int argc, char **argv)
 	numElements = stripSize;
 
 	
-   MPI_Scatter(A, numElements, MPI_DOUBLE, LocalA, numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+ //  MPI_Scatter(A, numElements, MPI_DOUBLE, LocalA, numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 	
 	if(myrank == 0){
 	printf("A[0][0] = %f\n", A[1][0]);	
-	//}else{
-	//printf("LocalA[0][0] = %f\n", LocalA[0][0]);
+	}else{
+	printf("LocalA[0][0] = %f\n", LocalA[0][0]);
 	}
 	
     MPI_Finalize();

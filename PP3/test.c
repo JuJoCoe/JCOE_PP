@@ -25,7 +25,7 @@ double *createMatrix (int nrows, int ncols){
 void printArray (double *row, int nElements) {
     int i;
     for (i=0; i<nElements; i++) {
-        printf("%d ", row[i]);
+        printf("%f ", row[i]);
     }
     printf("\n");
 }
@@ -33,7 +33,6 @@ void printArray (double *row, int nElements) {
 
 int main(int argc, char **argv)
 {
-	printf("print?\n");
     double *A, *b, *x;
     int i,j,k;
   //  int index[250];

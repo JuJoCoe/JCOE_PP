@@ -42,7 +42,7 @@ int main(int argc, char **argv)
 	    double* tmp2 = (double*)malloc(numElements * N * sizeof(double));
 	    LocalA = (double **) malloc (sizeof(double *) * numElements);
 	    for (i = 0; i < N; i++)
-	      LocalA[i] = &tmp[i * N];
+	      LocalA[i] = &tmp2[i * N];
 	  
 	  
 

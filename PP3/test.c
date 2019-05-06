@@ -27,11 +27,36 @@ int main(int argc, char **argv)
 	
 
     //Allocate memory for matrix A (Memory allocation code received from Yong Chen)
-	if(myrank == 0){
-		double A[N][N];
-	}
-		double LocalA[N/numnodes][N];
-	
+	if (myrank == 0) {
+	    tmp = (double *) malloc (sizeof(double ) * N * N);
+	    A = (double **) malloc (sizeof(double *) * N);
+	    if(tmp == NULL){
+	    	printf("ERROR ALLOCATING tmp in rank 0");
+	    	return -1;
+	    }	
+	    if(A == NULL){
+	    	printf("ERROR ALLOCATING A in rank 0");
+	    	return -1;
+	    }
+
+	    for (i = 0; i < N; i++)
+	      A[i] = &tmp[i * N];
+	  }
+	//Allocate memory for matrix A in other processes
+	  else {
+	    tmp = (double *) malloc (sizeof(double ) * ((N * N / numnodes)+1));
+	    LocalA = (double **) malloc (sizeof(double *) * ((N / numnodes)+1));
+	    if(tmp == NULL){
+	    	printf("ERROR ALLOCATING tmp in cluster %s", processor_name);
+	    	return -1;
+	   	   	}
+	    if(A == NULL){
+	    	printf("ERROR ALLOCATING A in cluster %s", processor_name);
+	    	return -1;
+	    	}
+	    for (i = 0; i < N / numnodes; i++)
+	      LocalA[i] = &tmp[i * N];
+	  }
 	  
 
     //Allocate b to everyone

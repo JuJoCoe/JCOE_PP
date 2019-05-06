@@ -8,7 +8,7 @@ int main(int argc, char **argv)
 
     double **A, **LocalA, *b, *x, *tmp;
     int i,j,k;
-    int index[2000];
+    int index[250];
     int N=2000;
     int myrank, numnodes, stripSize, offset, numElements;
     double startTime, endTime;

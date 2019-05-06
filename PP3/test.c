@@ -126,9 +126,9 @@ int main(int argc, char **argv)
 
     	            for(i= k+1; i<N; i++)
     	            {
-    	            	float z = LocalA[k];
     	                if(index[i] == myrank)
     	                {
+			float z = LocalA[k];	
     	                    for(j=0;j<numElements;j++)
     	                    {
     	                    	LocalA[j] = LocalA[j] - z*LocalA[j];

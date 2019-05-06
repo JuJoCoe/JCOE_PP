@@ -24,7 +24,7 @@ int main(int argc, char **argv)
     MPI_Get_processor_name(processor_name, &name_len);
 
     N = atoi(argv[1]);
-	int from = rank * N;
+	int from = myrank * N;
 
     //Allocate memory for matrix A (Memory allocation code received from Yong Chen)
 	

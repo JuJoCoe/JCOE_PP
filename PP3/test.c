@@ -122,11 +122,11 @@ int main(int argc, char **argv)
     	            MPI_Scatter(A, numElements, MPI_DOUBLE, LocalA, numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     	            MPI_Bcast (&b[k],1,MPI_DOUBLE,index[k],MPI_COMM_WORLD);
 
-    	           	for(i = 0; i < numElements; i++){
-			    float z = LocalA[k];	
-    	                    for(j=k+1;j<N-1;j++)
+    	           	for(i = 0; i < N/numnodes; i++){
+			    float z = LocalA[(i*N)+k];	
+    	                    for(j=k+1;j<N;j++)
     	                    {
-    	                    	LocalA[j] = LocalA[j] - z*LocalA[j];
+    	                    	LocalA[(i*N)+j] = LocalA[(i*N)+j] - z*LocalA[(i*N)+j];
     	                    }
 
     	                    	b[k] = b[k] - LocalA[k] * b[k];

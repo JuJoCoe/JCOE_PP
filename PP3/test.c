@@ -94,7 +94,7 @@ int main(int argc, char **argv)
    	   printf("Process %d received elements: ", myrank);
       	   printArray(LocalA, numElements);
 	
-	localA[0] = 20.00;
+	LocalA[0] = 20.00;
 	MPI_Gather(LocalA, numElements, MPI_DOUBLE, A, numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 	if(myrank == 0){
 		printArray(A, N*N);

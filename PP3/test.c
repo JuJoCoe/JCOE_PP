@@ -44,8 +44,8 @@ int main(int argc, char **argv)
 	      A[i] = &tmp[i * N];
 	//}
 	//Every process allocates LocalA
-	    tmp = (double *) malloc (sizeof(double ) * ((N * N ));
-	    LocalA = (double **) malloc (sizeof(double *) * ((N));
+	    tmp = (double *) malloc (sizeof(double ) * N * N );
+	    LocalA = (double **) malloc (sizeof(double *) * N);
 	    if(tmp == NULL){
 	    	printf("ERROR ALLOCATING tmp in cluster %s", processor_name);
 	    	return -1;

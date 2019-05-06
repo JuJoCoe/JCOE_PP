@@ -129,7 +129,7 @@ int main(int argc, char **argv)
     	                    	LocalA[j] = LocalA[j] - z*LocalA[j];
     	                    }
 
-    	                    	b[i] = b[i] - LocalA[k] * b[k];
+    	                    	b[k] = b[k] - LocalA[k] * b[k];
     	                    	LocalA[k] = 0.0;
     	                    }
     	                

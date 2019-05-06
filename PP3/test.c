@@ -102,10 +102,10 @@ int main(int argc, char **argv)
    }
 
 	stripSize = N/numnodes;
-	numElements = stripSize;
+	numElements = 1;
 
 	
- //  MPI_Scatter(&(A[0][0]), numElements, MPI_DOUBLE, LocalA[0], numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+   MPI_Scatter(&(A[0][0]), numElements, MPI_DOUBLE, LocalA[0], numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 	
 //	if(myrank == 0){
 //	printf("A[0][0] = %f\n", A[1][0]);	

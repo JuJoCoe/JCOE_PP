@@ -58,7 +58,7 @@ int main(int argc, char **argv)
 
 	if(myrank == 0){
 	  A = createMatrix(N, N);
-	//  printArray(A, N*N);
+	  printArray(A, N*N);
 	}
 
 	//Every process allocates LocalA
@@ -89,9 +89,74 @@ int main(int argc, char **argv)
     		}
     	}
 
-   MPI_Scatter(A, numElements, MPI_DOUBLE, LocalA, numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    	
+
+   	   
+    	for(i=0; i<N; i++)
+    	    {
+    	        index[i]= i % numnodes;
+    	    }
+
+    	    if (myrank == 0) {
+    	    startTime = MPI_Wtime();
+
+    	  }
+    	    
+    	    for(k=0;k<N;k++)
+    	        {
+    	            if (myrank == 0){
+    	        	float y = A[k*k];
+    	        	for(int j = k+1; j < N; j++){
+    	        		A[k * j] = A[k * j]/y;
+    	        		}
+    	        		A[k * k] = 1.0;
+    	        		b[k] = b[k]/y;
+
+
+
+    	            }
+    	            MPI_Scatter(A, numElements, MPI_DOUBLE, LocalA, numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    	            MPI_Bcast (&b[k],1,MPI_DOUBLE,index[k],MPI_COMM_WORLD);
+
+    	            for(i= k+1; i<N; i++)
+    	            {
+    	            	float z = localA[k * i];
+    	                if(index[i] == myrank)
+    	                {
+    	                    for(j=0;j<N;j++)
+    	                    {
+    	                    	A[i*j] = A[i*j] - z*A[i*j];
+    	                    	}
+
+    	                    	b[i] = b[i] - A[i * k] * b[k];
+    	                    	A[i *k] = 0.0;
+    	                    }
+    	                }
+    	            MPI_Gather(LocalA, numElements, MPI_DOUBLE, A, numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    	            }
+    	    
+    	    
+    	    
+
+    	        if (myrank == 0) {
+    	        endTime = MPI_Wtime();
+    	        printf("Time is %f\n", endTime-startTime);
+    	      }
+
+
+    	        if (myrank==0){
+
+    	        	for(int i=N-1; i >= 0; i--){
+    	        		x[i] = b[i];
+    	        		for(int j=N-1; j > i; j--){
+    	        			x[i] = x[i] - A[i][j] * x[j];
+    	        			}
+    	        			x[i] = x[i]/A[i*i];
+    	        			}
+    	        	}
+    
+
 	
-	MPI_Gather(LocalA, numElements, MPI_DOUBLE, A, numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
         MPI_Finalize();
 	return 0;

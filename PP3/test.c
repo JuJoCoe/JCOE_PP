@@ -99,6 +99,12 @@ int main(int argc, char **argv)
     		 }
     	 }
    }
+	for(int i = 0; i < N; i++){
+    		for(int j = 0; j < N; j++){
+			LocalA[i][j] == 0;
+		}
+	}
+	
 	
 	stripSize = N/numnodes;
 	numElements = stripSize;

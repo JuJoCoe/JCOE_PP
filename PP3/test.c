@@ -104,10 +104,10 @@ int main(int argc, char **argv)
 	numElements = stripSize;
 	
 	
-   MPI_Scatter(A, numElements, MPI_DOUBLE, LocalA[rank], numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+   MPI_Scatter(A, numElements, MPI_DOUBLE, LocalA[myrank], numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 	
 	printf("A[0][0] = %f\n", A[1][0]);	
-	printf("LocalA[0][0] = %f\n", LocalA[rank][0]);
+	printf("LocalA[0][0] = %f\n", LocalA[myrank][0]);
 	
     MPI_Finalize();
 	return 0;

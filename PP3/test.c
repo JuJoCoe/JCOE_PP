@@ -126,16 +126,16 @@ int main(int argc, char **argv)
 
     	            for(i= k+1; i<N; i++)
     	            {
-    	            	float z = LocalA[k * i];
+    	            	float z = LocalA[k];
     	                if(index[i] == myrank)
     	                {
     	                    for(j=0;j<numElements;j++)
     	                    {
-    	                    	LocalA[i*j] = LocalA[i*j] - z*LocalA[i*j];
+    	                    	LocalA[j] = LocalA[j] - z*LocalA[j];
     	                    	}
 
-    	                    	b[i] = b[i] - LocalA[i * k] * b[k];
-    	                    	LocalA[i *k] = 0.0;
+    	                    	b[i] = b[i] - LocalA[k] * b[k];
+    	                    	LocalA[k] = 0.0;
     	                    }
     	                }
     	            MPI_Gather(LocalA, numElements, MPI_DOUBLE, A, numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);

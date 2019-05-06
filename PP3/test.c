@@ -28,7 +28,7 @@ int main(int argc, char **argv)
 
     //Allocate memory for matrix A (Memory allocation code received from Yong Chen)
 	
-	if(myrank == 0){
+	//if(myrank == 0){
 	    tmp = (double *) malloc (sizeof(double ) * N * N);
 	    A = (double **) malloc (sizeof(double *) * N);
 	    if(tmp == NULL){
@@ -42,7 +42,7 @@ int main(int argc, char **argv)
 
 	    for (i = 0; i < N; i++)
 	      A[i] = &tmp[i * N];
-	}
+	//}
 	//Every process allocates LocalA
 	    tmp = (double *) malloc (sizeof(double ) * ((N * N / numnodes)+1));
 	    LocalA = (double **) malloc (sizeof(double *) * ((N / numnodes)+1));
@@ -102,12 +102,12 @@ int main(int argc, char **argv)
 	
 	stripSize = N/numnodes;
 	numElements = stripSize;
-
 	
-   MPI_Scatter(A, numElements, MPI_DOUBLE, LocalA, numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+	
+   MPI_Scatter(A, numElements, MPI_DOUBLE, LocalA[rank], numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 	
 	printf("A[0][0] = %f\n", A[1][0]);	
-	printf("LocalA[0][0] = %f\n", LocalA[0][0]);
+	printf("LocalA[0][0] = %f\n", LocalA[rank][0]);
 	
     MPI_Finalize();
 	return 0;

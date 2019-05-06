@@ -3,12 +3,39 @@
 #include <time.h>
 #include <mpi.h>
 
+
+
+double *createMatrix (int nrows, int ncols) {
+    double *matrix;
+    int h, i, j;
+
+    if (( matrix = malloc(nrows*ncols*sizeof(double))) == NULL) {
+        printf("Malloc error");
+        exit(1);
+    }
+
+    for (h=0; h<nrows*ncols; h++) {
+        matrix[h] = h+1;
+    }
+
+    return matrix;
+}
+
+void printArray (double *row, int nElements) {
+    int i;
+    for (i=0; i<nElements; i++) {
+        printf("%d ", row[i]);
+    }
+    printf("\n");
+}
+
+
 int main(int argc, char **argv)
 {
 
-    double **A, **LocalA, *b, *x;
+    double *A, *b, *x;
     int i,j,k;
-    int index[250];
+  //  int index[250];
     int N=2000;
     int myrank, numnodes, stripSize, offset, numElements;
     double startTime, endTime;
@@ -25,26 +52,21 @@ int main(int argc, char **argv)
 
     N = atoi(argv[1]);
 
-	
+
 
     //Allocate memory for matrix A (Memory allocation code received from Yong Chen)
 	stripSize = N/numnodes;
 	numElements = stripSize;
-	
-	if(myrank == 0){
-	    double* tmp = (double*)malloc(N * N * sizeof(double));
-	    A = (double **) malloc (sizeof(double *) * N);
 
-	    for (i = 0; i < N; i++)
-	      A[i] = &tmp[i * N];
+	if(myrank == 0){
+	  A = creatematrix(N, N);
+	  printArray(A, N*N);
 	}
+
 	//Every process allocates LocalA
-	    double* tmp2 = (double*)malloc(numElements * N * sizeof(double));
-	    LocalA = (double **) malloc (sizeof(double *) * numElements);
-	    for (i = 0; i < N; i++)
-	      LocalA[i] = &tmp2[i * N];
-	  
-	  
+	   double *LocalA = malloc(sizeof(double) * numElements);
+
+
 
     //Allocate b to everyone
     	b = (double *) malloc (sizeof(double ) * N);
@@ -86,19 +108,16 @@ int main(int argc, char **argv)
     		 }
     	 }
    }
-	
+
 	stripSize = N/numnodes;
 	numElements = stripSize;
-	
-	
+
+
    MPI_Scatter(A, numElements, MPI_DOUBLE, LocalA, numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-	
-	if(myrank == 0){
-	printf("A[0][0] = %f\n", A[1][0]);
-	printf("%f\n", LocalA[0][1]);
-	}
-	printf("LocalA[0][0] = %f, rank = %d\n", LocalA[0][0], myrank);
-	
+
+   	   printf("Process %d received elements: ", myrank);
+       printArray(LocalA, numElements);
+
     MPI_Finalize();
 	return 0;
 }

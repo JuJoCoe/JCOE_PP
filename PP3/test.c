@@ -118,7 +118,7 @@ int main(int argc, char **argv)
 	printf("LocalA[0][0] = %f\n", LocalA[0][0]);
 	}
 	if(myrank == 1){
-	printf("LocalA[0][0] = %f from 1\n", LocalA[0][1]);
+	printf("LocalA[0][0] = %f from 1\n", LocalA[1][0]);
 	}
     MPI_Finalize();
 	return 0;

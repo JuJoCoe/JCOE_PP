@@ -33,7 +33,7 @@ void printArray (double *row, int nElements) {
 
 int main(int argc, char **argv)
 {
-
+	printf("print?\n");
     double *A, *b, *x;
     int i,j,k;
   //  int index[250];

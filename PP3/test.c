@@ -12,7 +12,7 @@ int main(int argc, char **argv)
     int N=2000;
     int myrank, numnodes, stripSize, offset, numElements;
     double startTime, endTime;
-	
+
 
     MPI_Init(&argc, &argv);
 
@@ -24,7 +24,7 @@ int main(int argc, char **argv)
     MPI_Get_processor_name(processor_name, &name_len);
 
     N = atoi(argv[1]);
-	
+	int from = rank * N;
 
     //Allocate memory for matrix A (Memory allocation code received from Yong Chen)
 	
@@ -105,7 +105,7 @@ int main(int argc, char **argv)
 	numElements = 1;
 
 	
-   MPI_Scatter(&(A[0][0]), numElements, MPI_DOUBLE, LocalA[0], numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+   MPI_Scatter(&(A[0][0]), numElements, MPI_DOUBLE, LocalA[from], numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 	
 //	if(myrank == 0){
 //	printf("A[0][0] = %f\n", A[1][0]);	

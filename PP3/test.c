@@ -5,8 +5,7 @@
 
 
 
-double *createMatrix (int nrows, int ncols) {
-		printf("why arent you printing2\n");
+double *createMatrix (int nrows, int ncols){
 
     double *matrix;
     int h, i, j;
@@ -54,7 +53,6 @@ int main(int argc, char **argv)
 
     N = atoi(argv[1]);
 
-	printf("why arent you printing\n");
 
     //Allocate memory for matrix A (Memory allocation code received from Yong Chen)
 	stripSize = N/numnodes;
@@ -94,7 +92,7 @@ int main(int argc, char **argv)
     	}
 
 
-/*
+
    if(myrank == 0){
     srand(1);
     for(int i = 0; i < N; i++){
@@ -110,7 +108,7 @@ int main(int argc, char **argv)
     		 }
     	 }
    }
-*/
+
 	stripSize = N/numnodes;
 	numElements = stripSize;
 

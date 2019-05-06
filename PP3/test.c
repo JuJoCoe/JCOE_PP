@@ -28,6 +28,7 @@ int main(int argc, char **argv)
 	
 
     //Allocate memory for matrix A (Memory allocation code received from Yong Chen)
+	/*
 	if (myrank == 0) {
 	    tmp = (double *) malloc (sizeof(double ) * N * N);
 	    A = (double **) malloc (sizeof(double *) * N);
@@ -59,7 +60,7 @@ int main(int argc, char **argv)
 	      LocalA[i] = &tmp[i * N];
 	  }
 	  
-
+*/
     //Allocate b to everyone
     	b = (double *) malloc (sizeof(double ) * N);
     	 if(b == NULL){

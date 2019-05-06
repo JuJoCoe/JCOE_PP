@@ -4,7 +4,7 @@
 #include <mpi.h>
 
 
-/*
+
 double *createMatrix (int nrows, int ncols){
 
     double *matrix;
@@ -29,7 +29,7 @@ void printArray (double *row, int nElements) {
     }
     printf("\n");
 }
-*/
+
 
 int main(int argc, char **argv)
 {

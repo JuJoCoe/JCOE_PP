@@ -92,7 +92,7 @@ int main(int argc, char **argv)
     	}
 
 
-
+/*
    if(myrank == 0){
     srand(1);
     for(int i = 0; i < N; i++){
@@ -108,7 +108,7 @@ int main(int argc, char **argv)
     		 }
     	 }
    }
-
+*/
 	stripSize = N/numnodes;
 	numElements = stripSize;
 

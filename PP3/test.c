@@ -34,14 +34,6 @@ int main(int argc, char **argv)
 	if(myrank == 0){
 	    double* tmp = (double*)malloc(N * N * sizeof(double));
 	    A = (double **) malloc (sizeof(double *) * N);
-	    if(tmp == NULL){
-	    	printf("ERROR ALLOCATING tmp in rank 0");
-	    	return -1;
-	    }	
-	    if(A == NULL){
-	    	printf("ERROR ALLOCATING A in rank 0");
-	    	return -1;
-	    }
 
 	    for (i = 0; i < N; i++)
 	      A[i] = &tmp[i * N];
@@ -49,14 +41,6 @@ int main(int argc, char **argv)
 	//Every process allocates LocalA
 	    double* tmp2 = (double*)malloc(numElements * N * sizeof(double));
 	    LocalA = (double **) malloc (sizeof(double *) * numElements);
-	    if(tmp == NULL){
-	    	printf("ERROR ALLOCATING tmp in cluster %s", processor_name);
-	    	return -1;
-	   	   	}
-	    if(LocalA == NULL){
-	    	printf("ERROR ALLOCATING A in cluster %s", processor_name);
-	    	return -1;
-	    	}
 	    for (i = 0; i < N; i++)
 	      LocalA[i] = &tmp[i * N];
 	  

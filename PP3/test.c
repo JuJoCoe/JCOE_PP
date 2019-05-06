@@ -42,6 +42,7 @@ int main(int argc, char **argv)
     double *A, *b, *x;
     int i,j,k;
     int N=2000;
+    int index[2000];
     int myrank, numnodes, stripSize, offset, numElements;
     double startTime, endTime;
 
@@ -94,7 +95,10 @@ int main(int argc, char **argv)
     		}
     	}
 
-    	
+    	for(i=0; i<N; i++)
+    	    {
+    	        index[i]= i % numnodes;
+    	    }
 
    	
     	    if (myrank == 0) {

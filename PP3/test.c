@@ -6,8 +6,9 @@
 int main(int argc, char **argv)
 {
 
-    double **A, **LocalA, *b, *x, *tmp;
+    double *b, *x, *tmp;
     int i,j,k;
+	double A[2000][2000];
     int index[2000];
     int N=2000;
     int myrank, numnodes, stripSize, offset, numElements;
@@ -104,13 +105,13 @@ int main(int argc, char **argv)
 	numElements = stripSize;
 
 	
-   MPI_Scatter(A[0], numElements, MPI_DOUBLE, LocalA[0], numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+ //  MPI_Scatter(A[0], numElements, MPI_DOUBLE, LocalA[0], numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 	
-	if(myrank == 0){
-	printf("A[0][0] = %f\n", A[1][0]);	
-	}else{
-	printf("LocalA[0][0] = %f\n", LocalA[0][0]);
-	}
+//	if(myrank == 0){
+//	printf("A[0][0] = %f\n", A[1][0]);	
+//	}else{
+//	printf("LocalA[0][0] = %f\n", LocalA[0][0]);
+//	}
 	
     MPI_Finalize();
 	return 0;

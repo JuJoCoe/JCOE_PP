@@ -108,6 +108,7 @@ int main(int argc, char **argv)
 	
 	if(myrank == 0){
 	printf("A[0][0] = %f\n", A[1][0]);
+	printf("%f\n", LocalA[0][1]);
 	}
 	printf("LocalA[0][0] = %f, rank = %d\n", LocalA[myrank][0], myrank);
 	

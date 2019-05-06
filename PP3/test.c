@@ -8,7 +8,7 @@ int main(int argc, char **argv)
 
     double *b, *x, *tmp;
     int i,j,k;
-    int index[500];
+    int index[2000];
     int N=2000;
     int myrank, numnodes, stripSize, offset, numElements;
     double startTime, endTime;
@@ -25,10 +25,13 @@ int main(int argc, char **argv)
 
     N = atoi(argv[1]);
 	
-	double A[N][N], LocalA[N][N];
 
     //Allocate memory for matrix A (Memory allocation code received from Yong Chen)
-	
+	if(myrank == 0){
+		double A[N][N];
+	}else{
+		double LocalA[N/numnodes][N];
+	}
 	  
 
     //Allocate b to everyone

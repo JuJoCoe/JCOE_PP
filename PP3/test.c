@@ -6,9 +6,8 @@
 int main(int argc, char **argv)
 {
 
-    double *b, *x, *tmp;
+    double **A, **LocalA, *b, *x, *tmp;
     int i,j,k;
-	double A[20][20];
     int index[2000];
     int N=2000;
     int myrank, numnodes, stripSize, offset, numElements;
@@ -28,7 +27,7 @@ int main(int argc, char **argv)
 	
 
     //Allocate memory for matrix A (Memory allocation code received from Yong Chen)
-	/*
+	
 	if (myrank == 0) {
 	    tmp = (double *) malloc (sizeof(double ) * N * N);
 	    A = (double **) malloc (sizeof(double *) * N);
@@ -60,7 +59,7 @@ int main(int argc, char **argv)
 	      LocalA[i] = &tmp[i * N];
 	  }
 	  
-*/
+
     //Allocate b to everyone
     	b = (double *) malloc (sizeof(double ) * N);
     	 if(b == NULL){
@@ -106,7 +105,7 @@ int main(int argc, char **argv)
 	numElements = stripSize;
 
 	
- //  MPI_Scatter(A[0], numElements, MPI_DOUBLE, LocalA[0], numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+   MPI_Scatter(A[0], numElements, MPI_DOUBLE, LocalA[0], numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 	
 //	if(myrank == 0){
 //	printf("A[0][0] = %f\n", A[1][0]);	

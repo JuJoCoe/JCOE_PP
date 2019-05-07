@@ -5,6 +5,7 @@
 
 
 
+//Create Matrix method, takes in a matrix and allocates memory
 double *createMatrix (int nrows, int ncols){
 
     double *matrix;
@@ -18,7 +19,6 @@ double *createMatrix (int nrows, int ncols){
 	srand(1);
     for (h=0; h<nrows*ncols; h++) {
 
-
         matrix[h] = (rand() % 11) - 5;
 	    if(matrix[h] == 0){
     	 	matrix[h] = 1;
@@ -27,15 +27,6 @@ double *createMatrix (int nrows, int ncols){
 
     return matrix;
 }
-
-void printArray (double *row, int nElements) {
-    int i;
-    for (i=0; i<nElements; i++) {
-        printf("%f ", row[i]);
-    }
-    printf("\n");
-}
-
 
 int main(int argc, char **argv)
 {
@@ -59,16 +50,16 @@ int main(int argc, char **argv)
     N = atoi(argv[1]);
 
 
-    //Allocate memory for matrix A (Memory allocation code received from Yong Chen)
+    //numElements in 1-d array size
 	numElements = (N*N)/numnodes;
 
+	//create matrix A, only in rank 0
 	if(myrank == 0){
 	  A = createMatrix(N, N);
-	//  printArray(A, N*N);
 	}
 
 	//Every process allocates LocalA
-	   double *LocalA = malloc(sizeof(double) * numElements);
+	 double *LocalA = malloc(sizeof(double) * numElements);
 
 
 
@@ -84,81 +75,79 @@ int main(int argc, char **argv)
 
 
     	//Allocate x to only rank 0
-    	if(myrank == 0){
-    	x = (double *) malloc (sizeof(double ) * N);
-    	 if(x == NULL){
-    		 printf("ERROR ALLOCATING x in cluster %s", processor_name);
-    		 return -1;
-    		 }
-    		for(i = 0; i < N; i++){
-    			x[i] = 0.0;
+    if(myrank == 0){
+    x = (double *) malloc (sizeof(double ) * N);
+    	if(x == NULL){
+    		printf("ERROR ALLOCATING x in cluster %s", processor_name);
+    		return -1;
+    		}
+    	for(i = 0; i < N; i++){
+    		x[i] = 0.0;
     		}
     	}
 
+    	//index to allow more consistent bcast operations
     	for(i=0; i<N; i++)
     	    {
     	        index[i]= i % numnodes;
     	    }
 
-
-    	    if (myrank == 0) {
-    	    startTime = MPI_Wtime();
-
+    	//start timer
+    	if (myrank == 0) {
+    	   startTime = MPI_Wtime();
     	  }
 
-    	    for(k=0;k<N;k++)
-    	        {
-    	            if (myrank == 0){
-    	        	float y = A[k*k];
-    	        	for(int j = k+1; j < N; j++){
-    	        		A[k * j] = A[k * j]/y;
-    	        		}
-    	        		A[k * k] = 1.0;
-    	        		b[k] = b[k]/y;
+    	//Start Guassian Elimination
+    	 for(k=0;k<N;k++){
+    	    if (myrank == 0){
+    	    float y = A[k*k];
+    	    for(int j = k+1; j < N; j++){
+    	       A[k * j] = A[k * j]/y;
+    	    }
+    	       A[k * k] = 1.0;
+    	       b[k] = b[k]/y;
+    	 }
+    	 //Scatter A, each process gets numElements of A, All get b
+    	 MPI_Scatter(A, numElements, MPI_DOUBLE, LocalA, numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    	 MPI_Bcast (&b[k],1,MPI_DOUBLE,index[k],MPI_COMM_WORLD);
+
+    	 //Parallelization
+    	 for(i = 0; i < N/numnodes; i++){
+    		 float z = LocalA[(i*N)+k];
+    	     for(j=k+1;j<N;j++){
+    	       LocalA[(i*N)+j] = LocalA[(i*N)+j] - z*LocalA[(i*N)+j];
+    	       }
+
+    	       b[k] = b[k] - LocalA[k] * b[k];
+    	       LocalA[k] = 0.0;
+    	  }
+
+    	 //Send all work back to A in root = 0
+    	  MPI_Gather(LocalA, numElements, MPI_DOUBLE, A, numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    }
 
 
 
-    	            }
-    	            MPI_Scatter(A, numElements, MPI_DOUBLE, LocalA, numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-    	            MPI_Bcast (&b[k],1,MPI_DOUBLE,index[k],MPI_COMM_WORLD);
+   //End Timer and Print
+   if (myrank == 0) {
+    endTime = MPI_Wtime();
+    printf("Time is %f\n", endTime-startTime);
+   }
 
-    	           	for(i = 0; i < N/numnodes; i++){
-			    float z = LocalA[(i*N)+k];
-    	                    for(j=k+1;j<N;j++)
-    	                    {
-    	                    	LocalA[(i*N)+j] = LocalA[(i*N)+j] - z*LocalA[(i*N)+j];
-    	                    }
-
-    	                    	b[k] = b[k] - LocalA[k] * b[k];
-    	                    	LocalA[k] = 0.0;
-    	                    }
-
-    	            MPI_Gather(LocalA, numElements, MPI_DOUBLE, A, numElements, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-    	            }
-
-
-
-
-    	        if (myrank == 0) {
-    	        endTime = MPI_Wtime();
-    	        printf("Time is %f\n", endTime-startTime);
-    	      }
-
-
-    	        if (myrank==0){
-
-    	        	for(int i=N-1; i >= 0; i--){
-    	        		x[i] = b[i];
-    	        		for(int j=N-1; j > i; j--){
-    	        			x[i] = x[i] - A[i*j] * x[j];
-    	        			}
-    	        			x[i] = x[i]/A[i*i];
-    	        			}
-    	        	}
+   //Backsub
+   if (myrank==0){
+	   for(int i=N-1; i >= 0; i--){
+		   x[i] = b[i];
+    	   for(int j=N-1; j > i; j--){
+    		   x[i] = x[i] - A[i*j] * x[j];
+    	   }
+    	   x[i] = x[i]/A[i*i];
+    	}
+   }
 
 
 
 
-        MPI_Finalize();
+    MPI_Finalize();
 	return 0;
 }
